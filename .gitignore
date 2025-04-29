@@ -1,0 +1,5 @@
+bucketTest/
+venv_*/
+secret*
+*.tar
+*.rpm
