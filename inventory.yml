@@ -1,0 +1,13 @@
+# Pour l installation:
+
+all:
+  hosts:
+    localhost.localdomain:
+      ansible_connection: local
+      ansible_user: "{{ lookup('env','LOGNAME') }}"
+  children:
+    vm:
+      hosts:
+        192.168.122.67:
+          ansible_connection: ssh
+          ansible_user: vmuser

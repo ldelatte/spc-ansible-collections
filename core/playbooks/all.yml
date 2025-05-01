@@ -1,0 +1,18 @@
+##### secured-pc ##### auteur: L. Delatte, 2024
+
+- hosts: '{{target|default("localhost.localdomain")}}'
+  become_method: sudo
+  become: no
+  vars_prompt:
+  - name: ansible_become_pass
+    prompt: For sudo cmds, what is your password ?
+    private: true
+  roles:
+  - role: system
+  - role: isolation
+  - role: clamav
+  - role: sshd
+  - role: xterm
+  tasks:
+  - name: reload user services
+    command: systemctl --user daemon-reload

@@ -1,0 +1,48 @@
+##### secured-pc ##### auteur: Laurent Delatte, 2024
+# configure xterm environment
+
+- block:
+
+  - name: xterm dirs
+    file:
+      path: "{{ ansible_user_dir }}/Téléchargements/xterm"
+      state: directory
+      owner: "{{ xt_ct_user }}"
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.xt }}"
+      mode: 0770
+
+  - name: crontab
+    template:
+      src: xterm_cron
+      dest: /etc/cron.d/spc-xterm_cron
+      mode: 0440
+  - template:
+      src: xterm_cron.sh
+      dest: "{{ ansible_user_dir }}/.local/bin/spc-xterm_cron.sh"
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: 0740
+
+  become: yes
+
+- name: local xterm exec
+  template:
+    src: xterm.sh
+    dest: "{{ local_bin_dir }}/xterm.sh"
+    mode: 0540
+- template:
+    src: pod-xterm.yml
+    dest: "{{ pods_dir }}/pod-xterm.yml"
+    mode: 0440
+- debug:
+    msg:
+    - 
+    - 
+    - A SElinux config must be performed in /root for xterm: ./spc-selConfig.sh xterm    then follow instructions.
+    - 
+    - 
+

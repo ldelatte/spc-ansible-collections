@@ -1,0 +1,142 @@
+##### secured-pc ##### auteur: Laurent Delatte, 2024
+# configure general system environment
+
+- name: Installation data
+  debug:
+    msg: |
+      installed host: {{ ansible_hostname }}"     "
+      install user: {{ ansible_user }}"     "
+      install user's dir: {{ ansible_user_dir }}"     "
+      roles dir:  {{ roles_dir }}"     "
+
+- block:
+
+  - name: various packages install
+    package:
+      name: ansible-core
+      state: present
+  - package:
+      name: epel-release
+      state: present
+  - package:
+      name: podman
+      state: present
+  - package:
+      name: curl
+      state: present
+  - package:
+      name: socat
+      state: present
+  - package:
+      name: ntfs-3g
+      state: present
+
+  - name: fichier hosts
+    template:
+      src: hosts.spc
+      dest: /etc/hosts.spc
+
+  - name: bashrc
+    template:
+      src: bashrcGen.sh
+      dest: /etc/profile.d/spc-bashrcGen.sh
+  - template:
+      src: xctl
+      dest: /etc/bash_completion.d/spc-xctl
+
+  - name: param vimrc
+    template:
+      src: vimrc.local
+      dest: /etc/vimrc.local
+
+  - name: param sudoers
+    template:
+      src: ajoutsSudoers
+      dest: /etc/sudoers.d/spc-ajoutsSudoers
+
+  - name: dir tele
+    file:
+      path: "{{ ansible_user_dir }}"
+      state: directory
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: 0750
+  - file:
+      path: "{{ ansible_user_dir }}/Téléchargements"
+      state: directory
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: 0770
+  - file:
+      path: "{{ ansible_user_dir }}/.bashrc.d"
+      state: directory
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: 0750
+
+  - name: other
+    command: usermod -a -G wheel,systemd-journal "{{ ansible_user }}"
+
+  - name: restart_pods
+    template:
+      src: restart_pods.sh
+      dest: /usr/local/bin/restart_pods.sh
+      mode: 0755
+
+  become: yes
+
+- name: local dirs
+  file:
+    path: "{{ ansible_user_dir }}/Images"
+    state: directory
+    mode: 0750
+- file:
+    path: "{{ ansible_user_dir }}/.config/containers/containers.conf.d"
+    state: directory
+    mode: 0750
+- file:
+    path: "{{ ansible_user_dir }}/.local"
+    state: directory
+    mode: 0750
+- file:
+    path: "{{ local_bin_dir }}"
+    state: directory
+    mode: 0750
+- file:
+    path: "{{ svc_dir }}"
+    state: directory
+    mode: 0750
+- file:
+    path: "{{ pods_dir }}"
+    state: directory
+    mode: 0750
+- file:
+    path: "{{ ansible_user_dir }}/.config/systemd/user"
+    state: directory
+    mode: 0750
+
+- name: param containers
+  template:
+    src: tz.conf
+    dest: "{{ ansible_user_dir }}/.config/containers/containers.conf.d/spc-tz.conf"
+    mode: 0440
+
+- name: other param
+  template:
+    src: _gitconfig
+    dest: "{{ ansible_user_dir }}/.ssh/.gitconfig.spc"
+    mode: 0440
+- template:
+    src: _gitignore
+    dest: "{{ ansible_user_dir }}/.ssh/.gitignore"
+    mode: 0440
+
+- debug:
+    msg:
+    - 
+    - 
+    - hosts file to configure in /etc with real local* IPs. See SPC examples produced.
+    - 
+    - when also other users than yours, update also login.defs + sub?id for SUB_UID_COUNT & SUB_GID_COUNT => "offset length" / 100000
+    - 
+    - 

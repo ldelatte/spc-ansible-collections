@@ -1,0 +1,35 @@
+---
+version_spc: 0.1.0
+
+# This collection range for se labels: 100-209 + 400-599
+# User specific collection range for se labels: 700-999
+# And user ids are set accordingly, starting with 31100&131099.
+
+# specific users & container users:
+ff_user: 31100
+ff_ct_user: 131099   # X11, ...
+xt_user: 31200
+xt_ct_user: 131199  # X11, ...
+ve_user: 31400
+ve_ct_user: 131399
+gl_user: 31500
+gl_ct_user: 131499
+
+# selinux for containers:
+se_ct_level:
+  ff: "s0:c100,c119"
+  lo: "s0:c120,c129"
+  xt: "s0:c200,c209"
+  ve: "s0:c400,c419"
+se_ct_user: system_u
+se_ct_role: object_r
+se_ct_type: container_file_t
+
+nice: 19
+
+roles_dir: "{{ ansible_facts.env.PWD }}/../roles"
+local_bin_dir: "{{ ansible_user_dir }}/.local/bin"
+svc_dir: "{{ ansible_user_dir }}/.config/svc"
+pods_dir: "{{ ansible_user_dir }}/.config/pods"
+
+ansible_python_interpreter: /usr/bin/python3

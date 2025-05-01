@@ -4,7 +4,7 @@ version: 0.1.0
 readme: README.md
 authors:
   - L. DELATTE, FR (github.com/ldelatte)
-description: SPC (Secured PC) enhances the security and resiliency of your Linux PC: Core collection
+description: SPC (Secured PC) enhances the security and resiliency of your Linux PC - Core collection
 license_file:
   - GPL-3.0-or-later
 tags:

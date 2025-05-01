@@ -1,0 +1,59 @@
+##### secured-pc ##### auteur: Laurent Delatte, 2024
+# configure clamav environment
+
+- block:
+
+  - name: clamav packages install
+    package:
+      name: clamav
+      state: present
+  - package:
+      name: clamd
+      state: present
+
+  - name: clamav system config
+    command: setsebool -P antivirus_can_scan_system 1
+  - command: usermod -a -G {{ ansible_user }} clamscan
+
+  - name: clamav config
+    command: cp -p /etc/clamd.d/scan.conf /etc/clamd.d/scan.conf.0
+    args:
+      creates: /etc/clamd.d/scan.conf.0
+  - template:
+      src: scan.conf.spc
+      dest: /etc/clamd.d/scan.conf.spc
+      mode: 0640
+  - template:
+      src: freshclam.conf.spc
+      dest: /etc/clamd.d/freshclam.conf.spc
+      mode: 0640
+
+  - name: clamav access
+    file:
+      path: "{{ ansible_user_dir }}/.local/state"
+      state: directory
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: 0750
+  - file:
+      path: "{{ ansible_user_dir }}/.local/state/wireplumber"
+      state: directory
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: 0750
+  - file:
+      path: "{{ ansible_user_dir }}/.config/dconf"
+      state: directory
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: 0750
+
+  - debug:
+      msg:
+      - 
+      - 
+      - configuration needed for clamAV in /etc/clam.d. see SPC examples produced.
+      - 
+      - 
+
+  become: yes

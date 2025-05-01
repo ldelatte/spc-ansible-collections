@@ -1,0 +1,55 @@
+##### secured-pc ##### auteur: Laurent Delatte, 2024
+# configure sshd environment
+
+- block:
+
+  - name: sshd dirs
+    file:
+      path: "{{ ansible_user_dir }}/Téléchargements/sshd"
+      state: directory
+      owner: "{{ xt_ct_user }}"
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.xt }}"
+      mode: 0770
+  - template:
+      src: bashrc.sh
+      dest: "{{ ansible_user_dir }}/Téléchargements/sshd/.bash_profile"
+      owner: "{{ xt_ct_user }}"
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.xt }}"
+      mode: 0540
+
+  - name: crontab
+    template:
+      src: sshd_cron
+      dest: /etc/cron.d/spc-sshd_cron
+      mode: 0440
+  - template:
+      src: sshd_cron.sh
+      dest: "{{ ansible_user_dir }}/.local/bin/spc-sshd_cron.sh"
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: 0740
+
+  become: yes
+
+- name: local sshd exec
+  template:
+    src: pk-sshd.service
+    dest: "{{ svc_dir }}/pk-sshd.service"
+    mode: 0440
+- template:
+    src: pod-sshd.yml
+    dest: "{{ pods_dir }}/pod-sshd.yml"
+    mode: 0440
+- file:
+    path: "{{ ansible_user_dir }}/.config/systemd/user/pk-sshd.service"
+    state: link
+    src: ../../svc/pk-sshd.service
+    force: yes

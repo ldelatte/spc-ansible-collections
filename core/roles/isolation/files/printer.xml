@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>spc-printer</short>
+  <description>Port sortant pour le serveur d impression.</description>
+  <port protocol="tcp" port="515"/>
+</service>

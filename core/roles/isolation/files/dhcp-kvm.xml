@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>spc-dhcp-kvm</short>
+  <description>Ports sortants specifiques a dhcp pour libvirt/kvm.</description>
+  <port protocol="udp" port="68"/>
+</service>

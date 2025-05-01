@@ -67,7 +67,7 @@ You should then place the collection (clone the repository) into the Ansible col
 git clone git@github.com\:ldelatte/spc-ansible-collections.git ~/.ansible/collections/ansible_collections/spc
 ```
 
-If you plan to install from a particular directory, copy the `ansible.cfg` file to it.
+If you plan to install from a directory other than ~/.ansible/collections/ansible_collections/spc, copy the `ansible.cfg` file to it.
 
 ```bash
 cp ~/.ansible/collections/ansible_collections/spc/ansible.cfg <your_directory>
@@ -86,7 +86,7 @@ Note it will ask for the sudo password.
 
 You can then continue with the last command for another SPC collection by replacing `core` with its name.
 
-The list of locally available collections can be displayed like this:
+The list of locally available collections can be displayed with this command:
 ```bash
 ansible-galaxy collection list
 ```
