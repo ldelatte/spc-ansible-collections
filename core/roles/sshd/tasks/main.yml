@@ -24,6 +24,16 @@
       setype: "{{ se_ct_type }}"
       selevel: "{{ se_ct_level.xt }}"
       mode: 0540
+  - template:
+      src: shadow
+      dest: "{{ ansible_user_dir }}/Téléchargements/sshd/.shadow.spc"
+      owner: "{{ xt_ct_user }}"
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.xt }}"
+      mode: 0460
 
   - name: crontab
     template:
@@ -53,3 +63,11 @@
     state: link
     src: ../../svc/pk-sshd.service
     force: yes
+
+- debug:
+    msg:
+    -
+    -
+    - You must then configure the ~/Téléchargements/sshd/.shadow file with a password. See SPC example produced: .shadow.spc
+    -
+    -

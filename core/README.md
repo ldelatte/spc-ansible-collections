@@ -93,6 +93,28 @@ ansible-galaxy collection list
 
 See more details in the documentation.
 
+## Usage
+
+### Example of activation of a local ssh daemon to access the PC remotely safely:
+
+Start the daemon:
+```
+sctl --user start pk-sshd.service
+```
+Then access to your PC with the password you have configured during the installation:
+```
+ssh -p 6022 user@<IP_of_your_PC>
+```
+
+### Example of launching a safe xterm terminal:
+
+Just type:
+```
+xterm
+```
+
+See more details in the documentation.
+
 ## Documentation
 
 The documentation is available in the `docs` directory.
