@@ -95,23 +95,59 @@ See more details in the documentation.
 
 ## Usage
 
-### Example of activation of a local ssh daemon to access the PC remotely safely:
+### Global usage
 
-Start the daemon:
+Everything downloaded or edited or to upload is from one of the "Téléchargements" subdirectories.
+
+You can move these docs somewhere else or into this place doing:
+```
+mv ~/Téléchargements/<subdir>/<doc> <destination dir>
+```
+or in the reverse order.
+
+### Launching a safe xterm window for testing:
+
+Type: `xterm`
+
+### Launching a safe Firefox window:
+
+Type any of `tec` or `pro` or `ach`, which are isolated from each other browsers.
+
+### Editing some documents with LibreOffice in a safe window:
+
+Type: `doc` first to (re)start the service.
+
+Then `lbo` for editing docs.
+
+Done thanks to the community docker image.
+
+### Browsing your documents inplace in a safe window (readonly mode):
+
+Type: `disp` or `disp <some docs path>`
+
+For example:
+```
+cd ~/Images
+disp <some images names>
+```
+
+Suited for text docs and images.
+
+### Activate a local ssh daemon to access the PC remotely and safely:
+
+Start the daemon (and when finished your job you normally stop it):
 ```
 sctl --user start pk-sshd.service
 ```
-Then access to your PC with the password you have configured during the installation:
+Then access to your PC:
 ```
 ssh -p 6022 user@<IP_of_your_PC>
 ```
+using the password you have configured during the installation.
 
-### Example of launching a safe xterm terminal:
+### "Glances" for a system view in a safe window:
 
-Just type:
-```
-xterm
-```
+Type: `glances`
 
 See more details in the documentation.
 

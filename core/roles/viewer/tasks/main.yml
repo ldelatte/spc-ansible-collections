@@ -1,0 +1,41 @@
+##### secured-pc ##### auteur: Laurent Delatte, 2024
+# configure viewer environment
+
+- block:
+
+  - name: various packages removal
+    package:
+      name: evince
+      state: absent
+  - package:
+      name: eog
+      state: absent
+  - name: dir config
+    file:
+      path: "{{ ansible_user_dir }}/.config/okular"
+      state: directory
+      owner: "{{ ve_ct_user }}"
+      group: "{{ ansible_user }}"
+      mode: 0750
+
+  become: yes
+
+- name: local viewer exec
+  template:
+    src: viewer.sh
+    dest: "{{ local_bin_dir }}/viewer.sh"
+    mode: 0540
+- template:
+    src: pod-viewer.yml
+    dest: "{{ pods_dir }}/pod-viewer.yml"
+    mode: 0440
+- name: local viewer service
+  template:
+    src: pk-viewer.service
+    dest: "{{ svc_dir }}/pk-viewer.service"
+    mode: 0440
+- file:
+    path: "{{ ansible_user_dir }}/.config/systemd/user/pk-viewer.service"
+    state: link
+    src: ../../svc/pk-viewer.service
+    force: yes
