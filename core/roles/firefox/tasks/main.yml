@@ -1,0 +1,146 @@
+##### secured-pc ##### auteur: Laurent Delatte, 2024
+# configure firefox environment
+
+- block:
+
+  - name: various packages install
+    package:
+      name: pulseaudio-utils
+      state: present
+
+  - name: firefox dirs
+    file:
+      path: "{{ ansible_user_dir }}/Téléchargements/FF-ach"
+      state: directory
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.ff }}"
+      mode: 0770
+  - file:
+      path: "{{ ansible_user_dir }}/Téléchargements/FF-pro"
+      state: directory
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.ff }}"
+      mode: 0770
+  - file:
+      path: "{{ ansible_user_dir }}/Téléchargements/FF-tec"
+      state: directory
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.ff }}"
+      mode: 0770
+  - file:
+      path: "{{ ansible_user_dir }}/.config/mozilla-ach"
+      state: directory
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ff_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.ff }}"
+      mode: 0750
+  - file:
+      path: "{{ ansible_user_dir }}/.config/mozilla-pro"
+      state: directory
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ff_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.ff }}"
+      mode: 0750
+  - file:
+      path: "{{ ansible_user_dir }}/.config/mozilla-tec"
+      state: directory
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ff_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.ff }}"
+      mode: 0750
+
+  - name: profiles
+    template:
+      src: xulstore.json
+      dest: "{{ ansible_user_dir }}/.config/mozilla-ach/xulstore.json.spc"
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ff_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.ff }}"
+      mode: 0600
+  - template:
+      src: xulstore.json
+      dest: "{{ ansible_user_dir }}/.config/mozilla-pro/xulstore.json.spc"
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ff_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.ff }}"
+      mode: 0600
+  - template:
+      src: xulstore.json
+      dest: "{{ ansible_user_dir }}/.config/mozilla-tec/xulstore.json.spc"
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ff_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.ff }}"
+      mode: 0600
+
+  - name: crontab
+    template:
+      src: ff_cron
+      dest: /etc/cron.d/spc-ff_cron
+      mode: 0440
+  - template:
+      src: ff_cron.sh
+      dest: "{{ ansible_user_dir }}/.local/bin/spc-ff_cron.sh"
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: 0740
+
+  - name: bashrc FF
+    template:
+      src: bashrcFF.sh
+      dest: "{{ ansible_user_dir }}/.bashrc.d/spc-bashrcFF.sh"
+      owner: root
+      group: "{{ ansible_user }}"
+      mode: 0440
+
+  - name: firefox system config for the camera
+    command: setsebool -P container_use_devices 1
+
+  become: yes
+
+- template:
+    src: pod-tec.yml
+    dest: "{{ pods_dir }}/pod-tec.yml"
+    mode: 0440
+- template:
+    src: pod-ach.yml
+    dest: "{{ pods_dir }}/pod-ach.yml"
+    mode: 0440
+- template:
+    src: pod-pro.yml
+    dest: "{{ pods_dir }}/pod-pro.yml"
+    mode: 0440
+- name: local firefox exec
+  template:
+    src: ffPod.sh
+    dest: "{{ local_bin_dir }}/ffPod.sh"
+    mode: 0540

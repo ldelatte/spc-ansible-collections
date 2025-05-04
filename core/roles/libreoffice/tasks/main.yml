@@ -1,0 +1,92 @@
+##### secured-pc ##### auteur: Laurent Delatte, 2024
+# configure libreoffice environment
+
+- block:
+
+  - name: libreoffice dirs
+    file:
+      path: "{{ ansible_user_dir }}/.config/libreoffice"
+      state: directory
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ff_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.lo }}"
+      mode: 0770
+  - name: for update
+    command: chcon -R --reference={{ ansible_user_dir }}/.config/libreoffice {{ ansible_user_dir }}/.config/libreoffice
+  - file:
+      path: "{{ ansible_user_dir }}/Téléchargements/libreoffice"
+      state: directory
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.lo }}"
+      mode: 0770
+  - file:
+      path: "{{ ansible_user_dir }}/.config/mozilla-lbo"
+      state: directory
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ff_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.lo }}"
+      mode: 0750
+  - name: profile
+    template:
+      src: xulstore.json
+      dest: "{{ ansible_user_dir }}/.config/mozilla-lbo/xulstore.json.spc"
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ff_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.lo }}"
+      mode: 0600
+  - name: for update
+    command: chcon -R --reference={{ ansible_user_dir }}/.config/mozilla-lbo {{ ansible_user_dir }}/.config/mozilla-lbo
+
+  - name: crontab
+    template:
+      src: librof_cron
+      dest: /etc/cron.d/spc-librof_cron
+      mode: 0440
+  - template:
+      src: librof_cron.sh
+      dest: "{{ ansible_user_dir }}/.local/bin/spc-librof_cron.sh"
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: 0740
+
+  - name: bashrc Lbo
+    template:
+      src: bashrcLbo.sh
+      dest: "{{ ansible_user_dir }}/.bashrc.d/spc-bashrcLbo.sh"
+      owner: root
+      group: "{{ ansible_user }}"
+      mode: 0440
+
+  become: yes
+
+- name: local libreoffice exec
+  template:
+    src: librof.sh
+    dest: "{{ local_bin_dir }}/librof.sh"
+    mode: 0540
+- template:
+    src: pod-librof.yml
+    dest: "{{ pods_dir }}/pod-librof.yml"
+    mode: 0440
+- template:
+    src: pk-librof.service
+    dest: "{{ svc_dir }}/pk-librof.service"
+    mode: 0440
+- file:
+    path: "{{ ansible_user_dir }}/.config/systemd/user/pk-librof.service"
+    state: link
+    src: ../../svc/pk-librof.service
+    force: yes

@@ -13,6 +13,8 @@
   - role: clamav
   - role: sshd
   - role: xterm
+  - role: firefox
+  - role: libreoffice
   tasks:
   - name: reload user services
     command: systemctl --user daemon-reload

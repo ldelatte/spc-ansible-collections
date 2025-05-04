@@ -1,0 +1,6 @@
+##### Adding by SPC v{{ version_spc }}
+##### secured-pc ##### auteur: Laurent Delatte, 2024
+
+* * * * * root {{ ansible_user_dir }}/.local/bin/spc-ff_cron.sh
+
+##### Added by SPC v{{ version_spc }}
