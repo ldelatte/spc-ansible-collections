@@ -38,15 +38,19 @@ Copyright 2024: ldelatte1@laposte.net
 
 See [roadmap](https://github.com/ldelatte/spc-ansible-collections/blob/main/core/changes/ROADMAP.md)
 
+## Contribution
+
+Contributions are welcome! Please see the contributing guidelines for more information.
+
 ## Prerequisite
 
 ### Target PC
 
 - Linux versions: Tested on CentOS Stream 9
-- The installation of the target Linux included a GUI like Gnome and container support like podman.
+- The installation of the target Linux included the options "server with GUI" like Gnome and "container support" like podman.
 - By default, /data is the directory that will contain your permanent data: docs, video, etc ... Better deploy it on its own volume.
 - It must be accessible by the ansible machine, either directly (same machine) or via ssh.
-- sudo rights for the installing user.
+- sudo rights (and password) for the user on the target PC used for the deployment of the collections.
 
 ### Ansible machine, if different
 
@@ -73,7 +77,7 @@ If you plan to install from a directory other than ~/.ansible/collections/ansibl
 cp ~/.ansible/collections/ansible_collections/spc/ansible.cfg <your_directory>
 ```
 
-After this you just need to run ansible to deploy locally or externally and after to apply the given instructions:
+After this you just need to run ansible to deploy locally or externally and after to apply the displayed instructions:
 ```bash
 ansible-playbook spc.core.all
 ```
@@ -123,6 +127,16 @@ Done thanks to the community docker image.
 
 ### Browsing your documents inplace in a safe window (readonly mode):
 
+#### Postinstallation of the service
+
+To activate permanently the service:
+```
+systemctl --user enable pk-viewer.service
+```
+and reboot to check.
+
+#### Viewer usage
+
 Type: `disp` or `disp <some docs path>`
 
 For example:
@@ -137,13 +151,13 @@ Suited for text docs and images.
 
 Start the daemon (and when finished your job you normally stop it):
 ```
-sctl --user start pk-sshd.service
+systemctl --user start pk-sshd.service
 ```
 Then access to your PC:
 ```
 ssh -p 6022 user@<IP_of_your_PC>
 ```
-using the password you have configured during the installation.
+using the password you have configured during the collection postinstallation.
 
 ### "Glances" for a system view in a safe window:
 
@@ -153,12 +167,10 @@ See more details in the documentation.
 
 ## Documentation
 
-The documentation is available in the `docs` directory.
+See [documentation](https://github.com/ldelatte/spc-ansible-collections/blob/main/core/docs/)
 
 See also more general documentations:
+- CentOS9 installation: https://tecadmin.net/download-centos-stream-9/
 - Ansible collections usage: https://docs.ansible.com/ansible/latest/collections_guide/index.html
-
-## Contribution
-
-Contributions are welcome! Please see the contributing guidelines for more information.
+- Podman containers and pods management: https://podman.io/docs
 

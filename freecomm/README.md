@@ -1,6 +1,8 @@
-# SPC Collections: spc.core and others
+# SPC Collections: spc.freecomm
 
 **SPC (Secured PC)** enhances the security and resiliency of your Linux PC using Ansible collections.
+
+**SPC Freecomm** collection contains free but commercial products, generally clients like "chrome" or "onedrive". It is dependent on the **SPC Core** collection.
 
 ## Presentation
 
@@ -44,58 +46,20 @@ Contributions are welcome! Please see the contributing guidelines for more infor
 
 ## Prerequisite
 
-### Target PC
-
-- Linux versions: Tested on CentOS Stream 9
-- The installation of the target Linux included the options "server with GUI" like Gnome and "container support" like podman.
-- By default, /data is the directory that will contain your permanent data: docs, video, etc ... Better deploy it on its own volume.
-- It must be accessible by the ansible machine, either directly (same machine) or via ssh.
-- sudo rights (and password) for the user on the target PC used for the deployment of the collections.
-
-### Ansible machine, if different
-
-- Ansible version 2.14 and above.
+The `spc.core` collection must be installed.
 
 ## Installation
 
-### All from the ansible machine:
-
-First install `ansible-core` package:
+Run ansible to deploy locally or externally and after apply the displayed instructions:
 ```bash
-dnf install -y ansible-core
-```
-
-You should then place the collection (clone the repository) into the Ansible collection path. Normally this is `~/.ansible/collections/ansible_collections/<namespace>/<collection>`, so for the core collection it would be: `~/.ansible/collections/ansible_collections/spc/core`:
-
-```bash
-git clone git@github.com\:ldelatte/spc-ansible-collections.git ~/.ansible/collections/ansible_collections/spc
-```
-
-If you plan to install from a directory other than ~/.ansible/collections/ansible_collections/spc, copy the `ansible.cfg` file to it.
-
-```bash
-cp ~/.ansible/collections/ansible_collections/spc/ansible.cfg <your_directory>
-```
-
-After this you just need to run ansible to deploy locally or externally and after to apply the displayed instructions:
-```bash
-ansible-playbook spc.core.all
+ansible-playbook spc.freecomm.all
 ```
 or if for instance to a VM (you'll need to declare it in the inventory before):
 ```bash
-ansible-playbook spc.core.all -l vm
+ansible-playbook spc.freecomm.all -l vm
 ```
 
 Note it will ask for the sudo password.
-
-You can then continue with the last command for another SPC collection by replacing `core` with its name.
-
-The list of locally available collections can be displayed with this command:
-```bash
-ansible-galaxy collection list
-```
-
-See more details in the documentation.
 
 ## Usage
 
@@ -109,59 +73,48 @@ mv ~/Téléchargements/<subdir>/<doc> <destination dir>
 ```
 or in the reverse order.
 
-### Launching a safe xterm window for testing:
+### Launching a safe chrome window for browsing:
 
-Type: `xterm`
+Type: `chrome`
 
-### Launching a safe Firefox window:
+### Storing your documents on MS cloud with OneDrive:
 
-Type any of `tec` or `pro` or `ach`, which are isolated from each other browsers.
-
-### Editing some documents with LibreOffice in a safe window:
-
-Type: `doc` first to (re)start the service.
-
-Then `lbo` for editing docs.
-
-Done thanks to the community docker image.
-
-### Browsing your documents inplace in a safe window (readonly mode):
+A Onedrive container runs in background, thanks to a community Docker image:
+- see more at: https://github.com/abraunegg/onedrive
 
 #### Postinstallation of the service
 
-To activate permanently the service:
+Here you can use this OneDrive image associated with 2 pod definitions installed in your ~/.config/pods directory:
+- pod-ms_onedrive.yml is the normal one, launched by the installed service.
+- pod-ops_msod.yml is the one you'll need to use just after the install, to initiate your MS OneDrive.
+
+You will have to launch manually the last one by this command:
 ```
-systemctl --user enable pk-viewer.service
+podman kube play pod-ops_msod.yml
+```
+
+At this time you need to initiate your config files: `config` and `sync_list`, located in ~/.config/onedrive directory, by editing them.
+
+Then to connect to the launched container:
+```
+podman exec -it pk-onedrive-pk-onedrive bash
+```
+
+You will then set 2 boolean parameters `ONEDRIVE_REAUTH` and `ONEDRIVE_RESYNC`, start the main script `entrypoint.sh` and authenticate to the cloud service, following the instructions.
+
+The doc associated with the image will give you further explanations.
+
+The last step is to activate permanently the service:
+```
+systemctl --user enable pk-ms_onedrive.service
 ```
 and reboot to check.
 
-#### Viewer usage
+#### Usage of the service
 
-Type: `disp` or `disp <some docs path>`
+It should be automatically started upon a boot.
 
-For example:
-```
-cd ~/Images
-disp <some images names>
-```
-
-Suited for text docs and images.
-
-### Activate a local ssh daemon to access the PC remotely and safely:
-
-Start the daemon (and when finished your job you normally stop it):
-```
-systemctl --user start pk-sshd.service
-```
-Then access to your PC:
-```
-ssh -p 6022 user@<IP_of_your_PC>
-```
-using the password you have configured during the collection postinstallation.
-
-### "Glances" for a system view in a safe window:
-
-Type: `glances`
+Docs added locally into the `msOneDrive` directory will now be synchronized remotely and vice versa.
 
 See more details in the documentation.
 

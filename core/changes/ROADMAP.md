@@ -4,5 +4,5 @@
 
 ## Roadmap
 
-- Integration of the "freecomm" collection including Chrome and OneDrive.
 - More applications to come: Jitsi
+- Ergonomy improvement

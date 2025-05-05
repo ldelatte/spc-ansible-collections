@@ -1,0 +1,21 @@
+##### Adding by SPC v{{ version_spc }}
+##### secured-pc ##### auteur: Laurent Delatte, 2024
+# Image from community: https://github.com/abraunegg/onedrive/blob/master/docs/Podman.md
+
+[Unit]
+Description=Service MS OneDrive pour Linux (param LDE)
+Wants=pk-ff.service
+After=pk-ff.service
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/podman kube play --replace --network=pmOutO {{ pods_dir }}/pod-ms_onedrive.yml
+ExecStop=/usr/bin/podman pod rm -f -i pk-onedrive
+Restart=no
+TimeoutStartSec=140
+TimeoutStopSec=30
+
+[Install]
+WantedBy=default.target
+
+##### Added by SPC v{{ version_spc }}

@@ -1,0 +1,20 @@
+namespace: spc
+name: freecomm
+version: 0.1.0
+readme: README.md
+authors:
+  - L. DELATTE, FR (github.com/ldelatte)
+description: SPC (Secured PC) enhances the security and resiliency of your Linux PC - Freecomm collection
+license_file:
+  - GPL-3.0-or-later
+tags:
+  - linux
+  - tools
+  - security
+  - spc
+dependencies: {}
+  - spc.core
+repository: https://github.com/ldelatte/spc-ansible-collections
+documentation: https://github.com/ldelatte/spc-ansible-collections/core/docs
+homepage: https://github.com/ldelatte/spc-ansible-collections
+issues: https://github.com/ldelatte/spc-ansible-collections/discussions

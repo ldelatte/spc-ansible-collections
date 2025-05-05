@@ -1,0 +1,59 @@
+##### secured-pc ##### auteur: Laurent Delatte, 2024
+# configure chrome environment
+
+- block:
+
+  - name: various packages install
+    package:
+      name: pulseaudio-utils
+      state: present
+
+  - name: chrome dirs
+    file:
+      path: "{{ ansible_user_dir }}/Téléchargements/chrome"
+      state: directory
+      owner: "{{ ch_ct_user }}"
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.ch }}"
+      mode: 0770
+  - file:
+      path: "{{ ansible_user_dir }}/.config/chrome"
+      state: directory
+      owner: "{{ ch_ct_user }}"
+      group: "{{ ch_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.ch }}"
+      mode: 0750
+
+  - name: crontab
+    template:
+      src: chrome_cron
+      dest: /etc/cron.d/spc-chrome_cron
+      mode: 0440
+  - template:
+      src: chrome_cron.sh
+      dest: "{{ ansible_user_dir }}/.local/bin/spc-chrome_cron.sh"
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: 0740
+
+  - name: chrome system config for the camera
+    command: setsebool -P container_use_devices 1
+
+  become: yes
+
+- name: pod chrome
+  template:
+    src: pod-chrome.yml
+    dest: "{{ pods_dir }}/pod-chrome.yml"
+    mode: 0440
+- name: local chrome exec
+  template:
+    src: chrome.sh
+    dest: "{{ local_bin_dir }}/chrome.sh"
+    mode: 0540
