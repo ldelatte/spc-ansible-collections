@@ -78,6 +78,10 @@
     dest: "{{ local_bin_dir }}/librof.sh"
     mode: 0540
 - template:
+    src: spc.core.libreoffice.desktop
+    dest: "{{ ansible_user_dir }}/.local/share/applications/spc.core.libreoffice.desktop"
+    mode: 0640
+- template:
     src: pod-librof.yml
     dest: "{{ pods_dir }}/pod-librof.yml"
     mode: 0440

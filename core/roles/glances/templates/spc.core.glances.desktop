@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=SPC-Glances
+Comment=SPC Glances system viewer
+Exec=/home/laurent/.local/bin/glances.sh
+Icon=/usr/share/icons/HighContrast/256x256/apps/utilities-system-monitor.png
+Terminal=false
+Type=Application
+Categories=

@@ -109,9 +109,13 @@ mv ~/Téléchargements/<subdir>/<doc> <destination dir>
 ```
 or in the reverse order.
 
-### Launching a safe xterm window for testing:
+### Launching a safe xterm window for shell or program  testing:
 
-Type: `xterm`
+- Type: `xterm` in a Gnome terminal that you can open via the graphical menu.
+
+- Or use directly the `SPC-Xterm` icon in the graphical menu.
+
+These 2 ways of starting apply to other SPC applications as well.
 
 ### Launching a safe Firefox window:
 

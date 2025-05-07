@@ -26,6 +26,10 @@
     dest: "{{ local_bin_dir }}/viewer.sh"
     mode: 0540
 - template:
+    src: spc.core.viewer.desktop
+    dest: "{{ ansible_user_dir }}/.local/share/applications/spc.core.viewer.desktop"
+    mode: 0640
+- template:
     src: pod-viewer.yml
     dest: "{{ pods_dir }}/pod-viewer.yml"
     mode: 0440

@@ -57,3 +57,7 @@
     src: chrome.sh
     dest: "{{ local_bin_dir }}/chrome.sh"
     mode: 0540
+- template:
+    src: spc.core.chrome.desktop
+    dest: "{{ ansible_user_dir }}/.local/share/applications/spc.core.chrome.desktop"
+    mode: 0640

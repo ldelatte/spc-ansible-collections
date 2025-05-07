@@ -1,6 +1,12 @@
 ---
 version_spc: 1.0.0
 
+data_dir: /data
+
+# From core:
+ff_user: 31100
+ff_ct_user: 131099   # X11, ...
+
 # This collection range for se labels: 210-299
 # User specific collection range for se labels: 700-999
 # And user ids are set accordingly, starting with 31100&131099.

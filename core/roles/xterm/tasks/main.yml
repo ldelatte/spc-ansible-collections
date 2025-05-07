@@ -35,6 +35,10 @@
     dest: "{{ local_bin_dir }}/xterm.sh"
     mode: 0540
 - template:
+    src: spc.core.xterm.desktop
+    dest: "{{ ansible_user_dir }}/.local/share/applications/spc.core.xterm.desktop"
+    mode: 0640
+- template:
     src: pod-xterm.yml
     dest: "{{ pods_dir }}/pod-xterm.yml"
     mode: 0440
