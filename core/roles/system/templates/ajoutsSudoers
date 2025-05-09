@@ -8,7 +8,7 @@ Defaults: {{ ansible_user }} timestamp_type=global
 
 ## Allows users to shutdown this system
 ALL  ALL= NOPASSWD: /sbin/shutdown -h now, /usr/sbin/reboot, /usr/bin/tail -80 /var/log/messages, /usr/bin/systemctl restart chronyd.service
-ALL  ALL= NOPASSWD: /usr/bin/nice -n -{{ nice }} /usr/local/bin/restart_pods.sh clamd
+ALL  ALL= NOPASSWD: /usr/bin/nice -n -{{ nice }} /usr/local/bin/spc-restart_pods.sh clamd
 ALL  ALL= NOPASSWD: /usr/bin/chcon system_u\:object_r\:container_file_t\:s0\:c??0\,c??9 /tmp/.X11-unix/X[23][012], /usr/bin/chmod 770 /tmp/.X11-unix/X[23][012], /usr/bin/chgrp ?31??9 /tmp/.X11-unix/X[23][012]
 ALL  ALL= NOPASSWD: /usr/bin/chcon system_u\:object_r\:container_file_t\:s0\:c??0\,c??9 /tmp/.X11-unix/P????, /usr/bin/chmod 770 /tmp/.X11-unix/P????, /usr/bin/chgrp ?31?99 /tmp/.X11-unix/P????
 ALL  ALL= NOPASSWD: /usr/bin/chown ?31[034][19]9 /dev/video0, /usr/bin/chown root /dev/video0

@@ -13,23 +13,16 @@
 
   - name: various packages install
     package:
-      name: ansible-core
+      name: "{{ item }}"
       state: present
-  - package:
-      name: epel-release
-      state: present
-  - package:
-      name: podman
-      state: present
-  - package:
-      name: curl
-      state: present
-  - package:
-      name: socat
-      state: present
-  - package:
-      name: ntfs-3g
-      state: present
+    loop:
+    - ansible-core
+    - epel-release
+    - podman
+    - curl
+    - socat
+    - ntfs-3g
+    - inotify-tools
 
   - name: fichier hosts
     template:
@@ -77,11 +70,28 @@
   - name: other
     command: usermod -a -G wheel,systemd-journal "{{ ansible_user }}"
 
-  - name: restart_pods
+  - name: restart_pods.sh
     template:
       src: restart_pods.sh
-      dest: /usr/local/bin/restart_pods.sh
+      dest: /usr/local/bin/spc-restart_pods.sh
       mode: 0755
+  - name: file_change.sh
+    template:
+      src: file_change.sh
+      dest: /usr/local/bin/spc-file_change.sh
+      mode: 0700
+  - name: file_change service
+    template:
+      src: file_change.service
+      dest: "/etc/systemd/system/spc-file_change.service"
+      mode: 0400
+  - service:
+      name: spc-file_change.service
+      enabled: yes
+  - template:
+      src: file_change
+      dest: /etc/logrotate.d/spc-file_change
+      mode: 0400
 
   become: yes
 

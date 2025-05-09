@@ -4,5 +4,5 @@
 
 ## Roadmap
 
-- More applications to come: Jitsi
-- Ergonomy improvement
+- v1.0.0: New applications: Thunderbird, Jitsi (curently, mails and teams are accessible throught browsers)
+

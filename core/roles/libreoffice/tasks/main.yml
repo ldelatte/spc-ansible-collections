@@ -50,18 +50,6 @@
   - name: for update
     command: chcon -R --reference={{ ansible_user_dir }}/.config/mozilla-lbo {{ ansible_user_dir }}/.config/mozilla-lbo
 
-  - name: crontab
-    template:
-      src: librof_cron
-      dest: /etc/cron.d/spc-librof_cron
-      mode: 0440
-  - template:
-      src: librof_cron.sh
-      dest: "{{ ansible_user_dir }}/.local/bin/spc-librof_cron.sh"
-      owner: "{{ ansible_user }}"
-      group: "{{ ansible_user }}"
-      mode: 0740
-
   - name: bashrc Lbo
     template:
       src: bashrcLbo.sh

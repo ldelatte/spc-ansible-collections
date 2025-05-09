@@ -1,6 +1,11 @@
 ##### Adding by SPC v{{ version_spc }}
 ##### secured-pc ##### auteur: Laurent Delatte, 2024
 
-* * * * * root {{ ansible_user_dir }}/.local/bin/spc-msod_cron.sh
+/var/log/spc-file_change.log {
+    missingok
+    daily
+    rotate 5
+    notifempty
+}
 
 ##### Added by SPC v{{ version_spc }}

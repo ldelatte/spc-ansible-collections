@@ -59,18 +59,6 @@
       mode: 0660
     when: ansible_connection == "local"
 
-  - name: crontab
-    template:
-      src: msod_groupe_cron
-      dest: /etc/cron.d/spc-msod_groupe_cron
-      mode: 0440
-  - template:
-      src: msod_cron.sh
-      dest: "{{ ansible_user_dir }}/.local/bin/spc-msod_cron.sh"
-      owner: "{{ ansible_user }}"
-      group: "{{ ansible_user }}"
-      mode: 0740
-
   become: yes
 
 - name: local ms_onedrive exec

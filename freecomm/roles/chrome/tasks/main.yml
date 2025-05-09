@@ -30,18 +30,6 @@
       selevel: "{{ se_ct_level.ch }}"
       mode: 0750
 
-  - name: crontab
-    template:
-      src: chrome_cron
-      dest: /etc/cron.d/spc-chrome_cron
-      mode: 0440
-  - template:
-      src: chrome_cron.sh
-      dest: "{{ ansible_user_dir }}/.local/bin/spc-chrome_cron.sh"
-      owner: "{{ ansible_user }}"
-      group: "{{ ansible_user }}"
-      mode: 0740
-
   - name: chrome system config for the camera
     command: setsebool -P container_use_devices 1
 

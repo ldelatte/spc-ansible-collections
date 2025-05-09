@@ -17,11 +17,10 @@ if [ "$PS1" ]; then
   alias tl='tail -80'
   alias msg='sudo tail -80 /var/log/messages'
   alias ntp='sudo systemctl restart chronyd.service'
-  alias rstc='sudo nice -n -{{ nice }} /usr/local/bin/restart_pods.sh clamd'
-  alias rsts='/usr/local/bin/restart_pods.sh pods'
+  alias rstc='sudo nice -n -{{ nice }} /usr/local/bin/spc-restart_pods.sh clamd'
+  alias rsts='/usr/local/bin/spc-restart_pods.sh pods'
   alias disp='viewer.sh'
   alias aff='viewer.sh'
-  alias chrome='chrome.sh'
   alias glances='glances.sh'
   #
   df -h|grep "[09][0-9]%"

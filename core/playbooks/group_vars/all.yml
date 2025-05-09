@@ -1,6 +1,8 @@
 ---
 version_spc: 0.1.0
 
+data_dir: /data
+
 # This collection range for se labels: 100-209 + 400-599
 # User specific collection range for se labels: 700-999
 # And user ids are set accordingly, starting with 31100&131099.

@@ -15,18 +15,6 @@
       selevel: "{{ se_ct_level.xt }}"
       mode: 0770
 
-  - name: crontab
-    template:
-      src: xterm_cron
-      dest: /etc/cron.d/spc-xterm_cron
-      mode: 0440
-  - template:
-      src: xterm_cron.sh
-      dest: "{{ ansible_user_dir }}/.local/bin/spc-xterm_cron.sh"
-      owner: "{{ ansible_user }}"
-      group: "{{ ansible_user }}"
-      mode: 0740
-
   become: yes
 
 - name: local xterm exec
