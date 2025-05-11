@@ -30,11 +30,15 @@
     src: pod-xterm.yml
     dest: "{{ pods_dir }}/pod-xterm.yml"
     mode: 0440
+- command: podman pull docker.io/ldelatte/xterm
 - debug:
     msg:
     - 
     - 
-    - A SElinux config must be performed in /root for xterm: ./spc-selConfig.sh xterm    then follow instructions.
+    - A SElinux config must be performed for xterm like this;
+    - give a simple try to launch xterm, which shouldn't work, like this;   xterm
+    - Then configure SElinux as root like this;
+    - su -;  ./spc-selConfig.sh xterm    then follow displayed instructions.
     - 
     - 
 

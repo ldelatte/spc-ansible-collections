@@ -88,3 +88,4 @@
   - ach
   - pro
   - tec
+- command: podman pull docker.io/ldelatte/alpff

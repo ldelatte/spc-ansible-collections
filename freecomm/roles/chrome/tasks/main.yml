@@ -30,6 +30,14 @@
       selevel: "{{ se_ct_level.ch }}"
       mode: 0750
 
+  - name: bashrc CH
+    template:
+      src: bashrcCH.sh
+      dest: "{{ ansible_user_dir }}/.bashrc.d/spc-bashrcCH.sh"
+      owner: root
+      group: "{{ ansible_user }}"
+      mode: 0440
+
   - name: chrome system config for the camera
     command: setsebool -P container_use_devices 1
 
@@ -49,3 +57,4 @@
     src: spc.core.chrome.desktop
     dest: "{{ ansible_user_dir }}/.local/share/applications/spc.core.chrome.desktop"
     mode: 0640
+- command: podman pull docker.io/ldelatte/chrome

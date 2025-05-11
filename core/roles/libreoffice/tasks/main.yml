@@ -82,3 +82,4 @@
     state: link
     src: ../../svc/pk-librof.service
     force: yes
+- command: podman pull lscr.io/linuxserver/libreoffice

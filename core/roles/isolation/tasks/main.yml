@@ -37,8 +37,6 @@
       dest: /etc/firewalld/services/spc-dhcp-kvm.xml
       mode: 0640
   - command: firewall-cmd --reload
-  - command: firewall-cmd --zone=libvirt --add-service=spc-sshd-ct --permanent
-    when: ansible_connection == "local"
 
   - name: selinux config
     template:

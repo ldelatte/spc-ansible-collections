@@ -43,3 +43,5 @@
     state: link
     src: ../../svc/pk-viewer.service
     force: yes
+- command: podman pull docker.io/ldelatte/okular
+- command: podman pull docker.io/ldelatte/gpgext

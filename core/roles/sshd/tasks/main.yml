@@ -51,6 +51,7 @@
     state: link
     src: ../../svc/pk-sshd.service
     force: yes
+- command: podman pull docker.io/ldelatte/sshd
 
 - debug:
     msg:

@@ -71,10 +71,10 @@ You should then place the collection (clone the repository) into the Ansible col
 git clone git@github.com\:ldelatte/spc-ansible-collections.git ~/.ansible/collections/ansible_collections/spc
 ```
 
-If you plan to install from a directory other than ~/.ansible/collections/ansible_collections/spc, copy the `ansible.cfg` file to it.
+Change to the new directory:
 
 ```bash
-cp ~/.ansible/collections/ansible_collections/spc/ansible.cfg <your_directory>
+cd ~/.ansible/collections/ansible_collections/spc
 ```
 
 After this you just need to run ansible to deploy locally or externally and after to apply the displayed instructions:

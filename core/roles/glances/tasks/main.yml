@@ -34,3 +34,4 @@
     src: pod-glances.yml
     dest: "{{ pods_dir }}/pod-glances.yml"
     mode: 0440
+- command: podman pull docker.io/ldelatte/glances
