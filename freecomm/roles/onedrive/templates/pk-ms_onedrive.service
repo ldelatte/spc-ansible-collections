@@ -4,8 +4,8 @@
 
 [Unit]
 Description=Service MS OneDrive pour Linux (param LDE)
-Wants=pk-ff.service
-After=pk-ff.service
+Wants=pk-viewer.service
+After=pk-viewer.service
 
 [Service]
 Type=forking

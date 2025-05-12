@@ -4,8 +4,8 @@
 
 [Unit]
 Description=Service viewer via un pod (integr & param LDE)
-Wants=pk-ff.service
-After=pk-ff.service
+Wants=network-online.target
+After=network-online.target
 
 [Service]
 Type=forking

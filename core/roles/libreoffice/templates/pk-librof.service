@@ -4,8 +4,8 @@
 
 [Unit]
 Description=Service libreoffice via un pod (integr & param LDE)
-Wants=pk-ff.service
-After=pk-ff.service
+Wants=pk-viewer.service
+After=pk-viewer.service
 
 [Service]
 Type=forking
