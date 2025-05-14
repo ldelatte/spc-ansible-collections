@@ -34,6 +34,53 @@
       setype: "{{ se_ct_type }}"
       selevel: "{{ se_ct_level.xt }}"
       mode: 0460
+  - file:
+      path: "{{ ansible_user_dir }}/Téléchargements/sshd/.keys"
+      state: directory
+      owner: "{{ xt_ct_user }}"
+      group: "{{ xt_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.xt }}"
+      mode: 0755
+
+  - name: generates a new set of keys for sshd
+    command: ssh-keygen -t rsa -b 4096 -N "" -f {{ ansible_user_dir }}/Téléchargements/sshd/.keys/ssh_host_rsa_key
+    args:
+      creates: "{{ ansible_user_dir }}/Téléchargements/sshd/.keys/ssh_host_rsa_key"
+  - command: ssh-keygen -t ecdsa -b 521 -N "" -f {{ ansible_user_dir }}/Téléchargements/sshd/.keys/ssh_host_ecdsa_key
+    args:
+      creates: "{{ ansible_user_dir }}/Téléchargements/sshd/.keys/ssh_host_ecdsa_key"
+  - command: ssh-keygen -t ed25519 -N "" -f {{ ansible_user_dir }}/Téléchargements/sshd/.keys/ssh_host_ed25519_key
+    args:
+      creates: "{{ ansible_user_dir }}/Téléchargements/sshd/.keys/ssh_host_ed25519_key"
+  - file:
+      path: "{{ ansible_user_dir }}/Téléchargements/sshd/.keys/{{ item }}"
+      owner: "{{ xt_ct_user }}"
+      group: "{{ xt_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.xt }}"
+      mode: 0400
+    loop:
+    - ssh_host_rsa_key
+    - ssh_host_ecdsa_key
+    - ssh_host_ed25519_key
+  - file:
+      path: "{{ ansible_user_dir }}/Téléchargements/sshd/.keys/{{ item }}"
+      owner: "{{ xt_ct_user }}"
+      group: "{{ xt_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.xt }}"
+      mode: 0444
+    loop:
+    - ssh_host_rsa_key.pub
+    - ssh_host_ecdsa_key.pub
+    - ssh_host_ed25519_key.pub
 
   become: yes
 
