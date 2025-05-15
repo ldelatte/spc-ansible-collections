@@ -31,7 +31,11 @@ flt() {
     sed -e 's/^/file:/' -e 's/ /%20/g'
 }
 
-dir="\/home\/user"`echo $PWD | sed -e 's/^\/[^\/]*\/[^\/]*//' -e 's/\//\\\____\//g' -e 's/____//'g`
+if echo $PWD | grep -q "^/home/" ;then
+  dir="\/home\/user"`echo $PWD | sed -e 's/^\/[^\/]*\/[^\/]*//' -e 's/\//\\\____\//g' -e 's/____//'g`
+else
+  dir="\/home\/user"`echo $PWD | sed -e 's/\//\\\____\//g' -e 's/____//'g`
+fi
 ext=0
 if [ `echo $* | lst | wc -l` = 1 ] && echo $* | lst | grep -q -i -e "\.pgp$" -e "\.gpg" ;then    # pgp ...
     pgp=`echo $* | lst| sed 's/ /\\\ /g'`
