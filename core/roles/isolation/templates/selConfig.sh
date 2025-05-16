@@ -23,10 +23,20 @@ sleep 5
 #
 ausearch -c "$cmd" --raw |audit2allow -M spc-sel-${cmd_}
 #
-cat spc-sel-${cmd_}.te
-echo ""
-echo ""
-echo To launch:     semodule -X 300 -i spc-sel-${cmd_}.pp
-echo ""
+if [ -f spc-sel-${cmd_}.te ] ;then
+  cat spc-sel-${cmd_}.te
+  echo ""
+  echo ""
+  echo To launch:     semodule -X 300 -i spc-sel-${cmd_}.pp
+  echo ""
+  echo ""
+else
+  echo ""
+  echo ""
+  echo "ERROR It seems xterm command attempt has not yet been performed"
+  echo ""
+  echo ""
+  exit 1
+fi
 
 ##### Added by SPC v{{ version_spc }}
