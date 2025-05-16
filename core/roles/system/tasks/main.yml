@@ -23,6 +23,13 @@
     - socat
     - ntfs-3g
     - inotify-tools
+  - package:
+      name: "{{ item }}"
+      state: absent
+    loop:
+    - firefox
+    - evince
+    - eog
 
   - name: fichier hosts
     template:
