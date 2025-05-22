@@ -95,6 +95,17 @@ The list of locally available collections can be displayed with this command:
 ansible-galaxy collection list
 ```
 
+Finally, you'll need to activate the services you plan to run for your usage using these commands:
+```bash
+systemctl [--user] enable --now <the_service_name>	, then check with:
+systemctl [--user] status <the_service_name>
+```
+
+For the 3 clamav services, you won't have to use the `--user` option.
+
+Tip:
+- When typing the service name, type the begining of a service `clam` or `pk-`, then tab for completion, then choose one.
+
 See more details in the documentation.
 
 ## Usage
