@@ -46,7 +46,7 @@ Contributions are welcome! Please see the contributing guidelines for more infor
 
 ### Target PC
 
-- Linux versions: Tested on CentOS Stream 9
+- Linux versions of RHEL family: Tested on Rocky Linux 9.5 and CentOS Stream 9
 - The installation of the target Linux included the options "server with GUI" like Gnome and "container support" like podman.
 - By default, /data is the directory that will contain your permanent data: docs, video, etc ... Better deploy it on its own volume.
 - It must be accessible by the ansible machine, either directly (same machine) or via ssh.
@@ -86,7 +86,8 @@ or if for instance to a VM (you'll need to declare it in the inventory before):
 ansible-playbook spc.core.all -l vm
 ```
 
-Note it will ask for the sudo password.
+- It will ask for the sudo password
+- Read the text displayed: some parts of the collections can ask for postinstall tasks, for instance some configurations
 
 You can then continue with the last command for another SPC collection by replacing `core` with its name.
 
@@ -130,7 +131,7 @@ These 2 ways of starting apply to other SPC applications as well.
 
 ### Launching a safe Firefox window:
 
-Type any of `tec` or `pro` or `ach`, which are isolated from each other browsers.
+Type any of `tec` or `pro` or `ach`, which are isolated from each other browsers that you can use for different types of activities.
 
 ### Editing some documents with LibreOffice in a safe window:
 
@@ -146,9 +147,8 @@ Done thanks to the community docker image.
 
 To activate permanently the service:
 ```
-systemctl --user enable pk-viewer.service
+systemctl --user enable --now pk-viewer.service
 ```
-and reboot to check.
 
 #### Viewer usage
 
