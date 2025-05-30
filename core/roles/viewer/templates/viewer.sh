@@ -13,8 +13,9 @@ xhost + LOCAL: >/dev/null
 # Execute le pod concerne
 
 lst() {
-    sed -e 's/\([^.]*\)\.\([^ ]*\) /\1.\2\n/g' |
-    while read l ;do [ -f "$l" ] && echo $l | sed "s/^/$dir\//" ;done
+    sed 's|\(\w\.\w*\) |\1\n|g' |
+    while read l ;do [ -f "$l" ] && echo -n "$dir/" && basename "$l" ;done |
+	sed -e 's|^/home/\w*||' -e 's|^|/home/user|'
 }
 
 flt() {
@@ -31,11 +32,12 @@ flt() {
     sed -e 's/^/file:/' -e 's/ /%20/g'
 }
 
-if echo $PWD | grep -q "^/home/" ;then
-  dir="\/home\/user"`echo $PWD | sed -e 's/^\/[^\/]*\/[^\/]*//' -e 's/\//\\\____\//g' -e 's/____//'g`
-else
-  dir="\/home\/user"`echo $PWD | sed -e 's/\//\\\____\//g' -e 's/____//'g`
-fi
+dir="`echo $* | sed 's|\(\w\.\w*\) |\1\n|g' | head -1`"
+dir=`dirname "$dir"`
+echo $dir | grep -q "^\.\." && { pwd=`echo $PWD | sed 's|/[^/]*$||'`; dir="`echo $dir | sed 's|..|'$pwd'|'`"; }
+echo $dir | grep -q "^\." && dir="`echo $dir | sed 's|.|'$PWD'|'`"
+echo $dir | grep -q "^\w" && dir="`echo $dir | sed 's|^|'$PWD'/|'`"
+
 ext=0
 if [ `echo $* | lst | wc -l` = 1 ] && echo $* | lst | grep -q -i -e "\.pgp$" -e "\.gpg" ;then    # pgp ...
     pgp=`echo $* | lst| sed 's/ /\\\ /g'`
@@ -56,6 +58,6 @@ fi
 
 doc=`flt $*`
 { echo ===${doc}=== && echo ""; } >/tmp/viewer.log
-nohup podman exec -it pk-view-pk-okular okular $doc 1>/tmp/viewer.log 2>&1 &
+nohup podman exec -it pk-view-pk-okular okular $doc 1>>/tmp/viewer.log 2>&1 &
 
 ##### Added by SPC v{{ version_spc }}
