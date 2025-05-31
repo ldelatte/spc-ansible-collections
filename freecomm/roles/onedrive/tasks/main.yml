@@ -79,4 +79,4 @@
     state: link
     src: ../../svc/pk-ms_onedrive.service
     force: yes
-- command: podman pull docker.io/driveone/onedrive
+- command: podman pull docker.io/driveone/onedrive:edge
