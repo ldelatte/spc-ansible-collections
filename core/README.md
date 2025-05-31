@@ -68,8 +68,10 @@ dnf install -y ansible-core
 You should then place the collection (clone the repository) into the Ansible collection path. Normally this is `~/.ansible/collections/ansible_collections/<namespace>/<collection>`, so for the core collection it would be: `~/.ansible/collections/ansible_collections/spc/core`:
 
 ```bash
-git clone git@github.com\:ldelatte/spc-ansible-collections.git ~/.ansible/collections/ansible_collections/spc
+git clone git@github.com:/ldelatte/spc-ansible-collections ~/.ansible/collections/ansible_collections/spc
 ```
+
+Note: It may be necessary to create the target directory using such a command: mkdir -p <the_directory>
 
 Change to the new directory:
 
@@ -101,6 +103,9 @@ Finally, you'll need to activate the services you plan to run for your usage usi
 systemctl [--user] enable --now <the_service_name>	, then check with:
 systemctl [--user] status <the_service_name>
 ```
+
+You normally will enable at least these services in this order:
+- clamav-clamonacc.service, clamav-freshclam.service, clamd@scan.service, pk-viewer.service
 
 For the 3 clamav services, you won't have to use the `--user` option.
 
