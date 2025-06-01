@@ -71,7 +71,7 @@ You should then place the collection (clone the repository) into the Ansible col
 git clone git@github.com:/ldelatte/spc-ansible-collections ~/.ansible/collections/ansible_collections/spc
 ```
 
-Note: It may be necessary to create the target directory using such a command: mkdir -p <the_directory>
+Note: It may be necessary to create the target directory using this command: `mkdir -p ~/.ansible/collections/ansible_collections`
 
 Change to the new directory:
 
