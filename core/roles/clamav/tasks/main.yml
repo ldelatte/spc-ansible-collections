@@ -21,11 +21,11 @@
       creates: /etc/clamd.d/scan.conf.0
   - template:
       src: scan.conf.spc
-      dest: /etc/clamd.d/scan.conf.spc
+      dest: /etc/clamd.d/scan.conf
       mode: 0640
   - template:
       src: freshclam.conf.spc
-      dest: /etc/clamd.d/freshclam.conf.spc
+      dest: /etc/clamd.d/freshclam.conf
       mode: 0640
 
   - name: clamav access
@@ -48,11 +48,22 @@
       group: "{{ ansible_user }}"
       mode: 0750
 
+  - name: services activation
+    service:
+      name: clamav-freshclam.service
+      enabled: yes
+  - service:
+      name: clamav-clamonacc.service
+      enabled: yes
+  - service:
+      name: clamd@scan.service
+      enabled: yes
+
   - debug:
       msg:
       - 
       - 
-      - configuration needed for clamAV in /etc/clam.d. see SPC examples produced.
+      - configuration for clamAV in /etc/clam.d may be checked if you have specific usage. Default config files are renamed in <name>.0.
       - 
       - 
 

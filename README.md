@@ -104,10 +104,8 @@ systemctl [--user] enable --now <the_service_name>	, then check with:
 systemctl [--user] status <the_service_name>
 ```
 
-You normally will enable at least these services in this order:
-- clamav-clamonacc.service, clamav-freshclam.service, clamd@scan.service, pk-viewer.service
-
-For the 3 clamav services, you won't have to use the `--user` option.
+The following services will be enabled by default:
+- clamav-clamonacc.service, clamav-freshclam.service, clamd@scan.service.
 
 Tip:
 - When typing the service name, type the begining of a service `clam` or `pk-`, then tab for completion, then choose one.
