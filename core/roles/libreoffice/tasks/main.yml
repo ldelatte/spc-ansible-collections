@@ -83,3 +83,8 @@
     src: ../../svc/pk-librof.service
     force: yes
 - command: podman pull lscr.io/linuxserver/libreoffice
+- service:
+    name: pk-librof.service
+    enabled: no
+    scope: user
+    daemon_reload: yes

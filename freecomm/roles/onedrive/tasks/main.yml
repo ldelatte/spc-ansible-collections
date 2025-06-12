@@ -80,3 +80,7 @@
     src: ../../svc/pk-ms_onedrive.service
     force: yes
 - command: podman pull docker.io/driveone/onedrive:edge
+- service:
+    name: pk-ms_onedrive.service
+    scope: user
+    daemon_reload: yes

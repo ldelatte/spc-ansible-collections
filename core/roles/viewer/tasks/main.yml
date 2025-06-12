@@ -45,3 +45,8 @@
     force: yes
 - command: podman pull docker.io/ldelatte/okular
 - command: podman pull docker.io/ldelatte/gpgext
+- service:
+    name: pk-viewer.service
+    enabled: yes
+    scope: user
+    daemon_reload: yes

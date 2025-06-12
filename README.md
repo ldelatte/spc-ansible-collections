@@ -105,9 +105,9 @@ systemctl [--user] status <the_service_name>
 ```
 
 The following services will be enabled by default:
-- clamav-clamonacc.service, clamav-freshclam.service, clamd@scan.service.
+- clamav-clamonacc.service, clamav-freshclam.service, clamd@scan.service, pk-viewer.
 
-Tip:
+If you want to activate other services:
 - When typing the service name, type the begining of a service `clam` or `pk-`, then tab for completion, then choose one.
 
 See more details in the documentation.
@@ -144,16 +144,7 @@ Then `lbo` for editing docs.
 
 Done thanks to the community docker image.
 
-### Browsing your documents inplace in a safe window (readonly mode):
-
-#### Postinstallation of the service
-
-To activate permanently the service:
-```
-systemctl --user enable --now pk-viewer.service
-```
-
-#### Viewer usage
+### Browsing your documents inplace in a safe window (readonly mode) using the viewer service:
 
 Type: `disp` or `disp <some docs path>`
 
@@ -163,7 +154,7 @@ cd ~/Images
 disp <some images names>
 ```
 
-Suited for text docs and images.
+Suited for text, PDF and images.
 
 ### Activate a local ssh daemon to access the PC remotely and safely:
 
@@ -171,7 +162,7 @@ Start the daemon (and when finished your job you normally stop it):
 ```
 systemctl --user start pk-sshd.service
 ```
-Then access to your PC:
+Then access to your PC from remote:
 ```
 ssh -p 6022 user@<IP_of_your_PC>
 ```

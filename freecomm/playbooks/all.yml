@@ -10,6 +10,3 @@
   roles:
   - role: onedrive
   - role: chrome
-  tasks:
-  - name: reload user services
-    command: systemctl --user daemon-reload

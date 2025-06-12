@@ -95,6 +95,7 @@
   - service:
       name: spc-file_change.service
       enabled: yes
+      daemon_reload: yes
   - template:
       src: file_change
       dest: /etc/logrotate.d/spc-file_change

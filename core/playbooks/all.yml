@@ -17,6 +17,3 @@
   - role: libreoffice
   - role: viewer
   - role: glances
-  tasks:
-  - name: reload user services
-    command: systemctl --user daemon-reload

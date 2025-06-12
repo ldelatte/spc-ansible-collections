@@ -99,6 +99,11 @@
     src: ../../svc/pk-sshd.service
     force: yes
 - command: podman pull docker.io/ldelatte/sshd
+- service:
+    name: pk-sshd.service
+    enabled: no
+    scope: user
+    daemon_reload: yes
 
 - debug:
     msg:
