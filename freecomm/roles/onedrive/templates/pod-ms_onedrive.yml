@@ -13,7 +13,9 @@ spec:
     # Image from community: https://github.com/abraunegg/onedrive/blob/master/docs/Podman.md
     image: driveone/onedrive:edge
     imagePullPolicy: IfNotPresent
-    # env:
+    env:
+    - name: ONEDRIVE_SYNC_ONCE
+      value: 1
     volumeMounts:
     - name: msod-conf
       mountPath: /onedrive/conf

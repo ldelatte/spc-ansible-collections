@@ -9,9 +9,10 @@
 # For explanations of all config options below see docs/USAGE.md or the man page.
 #
 # sync_dir = "~/OneDrive"
+sync_dir = "/onedrive/data"
 # skip_file = "~*|.~*|*.tmp"
 # monitor_interval = "300"
-monitor_interval = "900"
+monitor_interval = "1800"
 # skip_dir = ""
 # log_dir = "/var/log/onedrive/"
 # drive_id = ""

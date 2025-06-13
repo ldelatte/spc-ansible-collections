@@ -15,10 +15,14 @@ spec:
     imagePullPolicy: IfNotPresent
     env:
     # Booleans to set for manual resync/reauth:
-    - name: ONEDRIVE_RESYNC
-      value: 1
     - name: ONEDRIVE_REAUTH
       value: 0
+    - name: ONEDRIVE_RESYNC
+      value: 0
+    - name: ONEDRIVE_SYNC_ONCE
+      value: 1
+    - name: ONEDRIVE_DRYRUN
+      value: 1
     volumeMounts:
     - name: msod-conf
       mountPath: /onedrive/conf
@@ -29,7 +33,7 @@ spec:
     # command:
     command:
     - sleep
-    - 60000
+    - 1200
     # and manual launch of script: ./entrypoint.sh after your parameters settings
     entryPoint:
     - /bin/bash
