@@ -23,6 +23,7 @@
     - socat
     - ntfs-3g
     - inotify-tools
+    - scrub
   - package:
       name: "{{ item }}"
       state: absent

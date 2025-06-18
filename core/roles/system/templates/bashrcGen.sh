@@ -12,7 +12,8 @@ if [ "$PS1" ]; then
   alias jctl='journalctl'
   #
   alias l='ls -lrt'
-  alias la='ls -al'
+  alias la='ls -la'
+  alias lh='ls -lh'
   alias lz='ls -alZ'
   alias tl='tail -80'
   alias msg='sudo tail -80 /var/log/messages'
@@ -22,6 +23,7 @@ if [ "$PS1" ]; then
   alias disp='viewer.sh'
   alias aff='viewer.sh'
   alias glances='glances.sh'
+  alias scrub='scrub -b 4K'
   #
   df -h|grep "[09][0-9]%"
   #
