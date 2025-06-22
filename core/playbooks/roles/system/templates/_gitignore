@@ -1,0 +1,22 @@
+##### Adding by SPC v{{ version_spc }}
+##### secured-pc ##### auteur: L. Delatte, 2024
+## ~/.gitignore
+
+*.old
+*.sv
+*.nv
+*.log
+**/logs/
+*.res
+*.secret.*
+*.tar
+*.gz
+*.tgz
+#
+# python:
+**/__pycache__/
+# tests:
+*.csv
+*.txt
+
+##### Added by SPC v{{ version_spc }}

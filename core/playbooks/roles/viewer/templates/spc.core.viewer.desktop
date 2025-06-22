@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=SPC-Viewer
+Comment=SPC viewer for documents and images
+Exec={{ ansible_user_dir }}/.local/bin/viewer.sh
+Icon=/usr/share/icons/HighContrast/256x256/apps/documents.png
+Terminal=false
+Type=Application
+Categories=

@@ -1,0 +1,11 @@
+##### Adding by SPC v{{ version_spc }}
+##### secured-pc ##### auteur: L. Delatte, 2024
+
+/var/log/spc-file_change.log {
+    missingok
+    daily
+    rotate 5
+    notifempty
+}
+
+##### Added by SPC v{{ version_spc }}

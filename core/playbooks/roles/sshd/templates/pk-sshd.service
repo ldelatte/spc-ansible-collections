@@ -1,0 +1,21 @@
+##### Adding by SPC v{{ version_spc }}
+##### secured-pc ##### auteur: L. Delatte, 2024
+# sshd
+
+[Unit]
+Description=Service sshd via un pod
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/podman kube play --replace --network=pmOutX {{ pods_dir }}/pod-sshd.yml
+ExecStop=/usr/bin/podman pod rm -f -i pk-sshd
+Restart=no
+TimeoutStartSec=50
+TimeoutStopSec=40
+
+[Install]
+WantedBy=default.target
+
+##### Added by SPC v{{ version_spc }}

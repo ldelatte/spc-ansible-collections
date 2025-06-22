@@ -1,0 +1,195 @@
+##### secured-pc ##### auteur: L. Delatte, 2024
+# configure general system environment
+
+- name: Installation data
+  debug:
+   msg: |
+    installed host: {{ ansible_hostname }}"     "
+    install user: {{ ansible_user }}"     "
+    install user's dir: {{ ansible_user_dir }}"     "
+    roles dir:  {{ roles_dir }}"     "
+
+- name: Sudo tasks
+  become_method: ansible.builtin.sudo
+  become: true
+  block:
+
+   - name: Various packages install
+     package:
+      name: "{{ item }}"
+      state: present
+     loop:
+      - ansible-core
+      - epel-release
+      - podman
+      - curl
+      - socat
+      - ntfs-3g
+      - inotify-tools
+      - scrub
+   - name: Various packages removal
+     package:
+      name: "{{ item }}"
+      state: absent
+     loop:
+      - firefox
+      - evince
+      - eog
+
+   - name: File hosts
+     template:
+      src: hosts.spc
+      dest: /etc/hosts.spc
+      mode: "0644"
+
+   - name: Bashrc
+     template:
+      src: bashrcGen.sh
+      dest: /etc/profile.d/spc-bashrcGen.sh
+      mode: "0644"
+   - name: Bashrc
+     template:
+      src: xctl
+      dest: /etc/bash_completion.d/spc-xctl
+      mode: "0644"
+
+   - name: Param vimrc
+     template:
+      src: vimrc.local
+      dest: /etc/vimrc.local
+      mode: "0644"
+
+   - name: Param sudoers
+     template:
+      src: ajoutsSudoers
+      dest: /etc/sudoers.d/spc-ajoutsSudoers
+      mode: "0644"
+
+   - name: Create tele dir
+     file:
+      path: "{{ ansible_user_dir }}"
+      state: directory
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: "0750"
+   - name: Create tele dir
+     file:
+      path: "{{ ansible_user_dir }}/Téléchargements"
+      state: directory
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: "0770"
+   - name: Create tele dir
+     file:
+      path: "{{ ansible_user_dir }}/.bashrc.d"
+      state: directory
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: "0750"
+
+   - name: User addition to groups
+     command: usermod -a -G wheel,systemd-journal "{{ ansible_user }}"
+     register: res
+     changed_when: res.rc == 0
+
+   - name: Restart_pods.sh
+     template:
+      src: restart_pods.sh
+      dest: /usr/local/bin/spc-restart_pods.sh
+      mode: "0755"
+   - name: File_change.sh
+     template:
+      src: file_change.sh
+      dest: /usr/local/bin/spc-file_change.sh
+      mode: "0700"
+   - name: File_change service
+     template:
+      src: file_change.service
+      dest: "/etc/systemd/system/spc-file_change.service"
+      mode: "0400"
+   - name: File_change service
+     service:
+      name: spc-file_change.service
+      enabled: true
+      daemon_reload: true
+   - name: File_change service
+     template:
+      src: file_change
+      dest: /etc/logrotate.d/spc-file_change
+      mode: "0400"
+
+- name: Ssh dir
+  file:
+   path: "{{ ansible_user_dir }}/.ssh"
+   state: directory
+   mode: "0700"
+- name: Local dirs
+  file:
+   path: "{{ item }}"
+   state: directory
+   mode: "0750"
+  loop:
+   - "{{ ansible_user_dir }}/Images"
+   - "{{ ansible_user_dir }}/.local"
+   - "{{ local_bin_dir }}"
+   - "{{ ansible_user_dir }}/.config"
+   - "{{ svc_dir }}"
+   - "{{ pods_dir }}"
+   - "{{ ansible_user_dir }}/.config/containers/containers.conf.d"
+   - "{{ ansible_user_dir }}/.config/systemd/user"
+
+- name: Param containers
+  template:
+   src: tz.conf
+   dest: "{{ ansible_user_dir }}/.config/containers/containers.conf.d/spc-tz.conf"
+   mode: "0440"
+
+- name: Git config
+  stat:
+   path: "{{ ansible_user_dir }}/.gitconfig"
+  register: res
+- name: Git config
+  command: mv "{{ ansible_user_dir }}/.gitconfig" "{{ ansible_user_dir }}/.ssh/.gitconfig"
+  args:
+   creates: "{{ ansible_user_dir }}/.ssh/.gitconfig"
+  when: res.stat.exists
+- name: Git config
+  file:
+   path: "{{ ansible_user_dir }}/.gitconfig"
+   src: "{{ ansible_user_dir }}/.ssh/.gitconfig"
+   state: link
+   force: true
+- name: Git param
+  stat:
+   path: "{{ ansible_user_dir }}/.gitignore"
+  register: res
+- name: Git param
+  command: mv "{{ ansible_user_dir }}/.gitignore" "{{ ansible_user_dir }}/.ssh/.gitignore"
+  args:
+   creates: "{{ ansible_user_dir }}/.ssh/.gitignore"
+  when: res.stat.exists
+- name: Git config
+  template:
+   src: _gitconfig
+   dest: "{{ ansible_user_dir }}/.ssh/.gitconfig.spc"
+   mode: "0440"
+- name: Git param
+  template:
+   src: _gitignore
+   dest: "{{ ansible_user_dir }}/.ssh/.gitignore.spc"
+   mode: "0440"
+
+- name: Manual config
+  debug:
+   msg:
+    -
+    -
+    - It may be suitable to configure the 'hosts' file in /etc with real local* IPs. See SPC examples produced.
+    -
+    - Your ~/.ssh directory will contain personal data;  move the .git... SPC example files to .gitconfig and .gitignore or merge them if you already have some.
+    - For example;
+    - cd ~/.ssh;  mv .gitconfig.spc .gitconfig;  mv .gitignore.spc .gitignore
+    -
+    - when there are also other users than yours, update also login.defs + sub?id for SUB_UID_COUNT & SUB_GID_COUNT => "offset length" / 100000
+    -
+    -

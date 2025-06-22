@@ -1,12 +1,13 @@
-##### secured-pc ##### auteur: Laurent Delatte, 2024
+##### secured-pc ##### auteur: L. Delatte, 2024
 
-- hosts: '{{target|default("localhost.localdomain")}}'
-  become_method: sudo
-  become: no
+- name: Playbook freecomm all
+  hosts: '{{target|default("localhost.localdomain")}}'
+  become_method: ansible.builtin.sudo
+  become: false
   vars_prompt:
-  - name: ansible_become_pass
-    prompt: For sudo cmds, what is your password ?
-    private: true
+   - name: ansible_become_pass
+     prompt: For sudo cmds, what is your password ?
+     private: true
   roles:
-  - role: onedrive
-  - role: chrome
+   - role: onedrive
+   - role: chrome

@@ -1,0 +1,11 @@
+"" Adding by SPC v{{ version_spc }}
+"" secured-pc ##### auteur: L. Delatte, 2024
+""
+"" Adapt vim behaviour with indent & tabul:
+""
+"" set ai                  "" always set autoindenting on
+set shiftwidth=4
+set tabstop=4
+"" vim:ts=4:sw=4
+""
+"" Added by SPC v{{ version_spc }}

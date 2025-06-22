@@ -1,0 +1,97 @@
+##### secured-pc ##### auteur: L. Delatte, 2024
+# configure libreoffice environment
+
+- name: Sudo tasks
+  become_method: ansible.builtin.sudo
+  become: true
+  block:
+
+   - name: Libreoffice dir
+     file:
+      path: "{{ ansible_user_dir }}/.config/libreoffice"
+      state: directory
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ff_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.lo }}"
+      mode: "0770"
+   - name: Libreoffice dir
+     file:
+      path: "{{ ansible_user_dir }}/Téléchargements/libreoffice"
+      state: directory
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.lo }}"
+      mode: "0770"
+   - name: Libreoffice dir
+     file:
+      path: "{{ ansible_user_dir }}/.config/mozilla-lbo"
+      state: directory
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ff_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.lo }}"
+      mode: "0750"
+   - name: Profile
+     template:
+      src: xulstore.json
+      dest: "{{ ansible_user_dir }}/.config/mozilla-lbo/xulstore.json.spc"
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ff_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.lo }}"
+      mode: "0600"
+
+   - name: Bashrc Lbo
+     template:
+      src: bashrcLbo.sh
+      dest: "{{ ansible_user_dir }}/.bashrc.d/spc-bashrcLbo.sh"
+      owner: root
+      group: "{{ ansible_user }}"
+      mode: "0440"
+
+- name: Local libreoffice exec
+  template:
+   src: librof.sh
+   dest: "{{ local_bin_dir }}/librof.sh"
+   mode: "0540"
+- name: Desktop param
+  template:
+   src: spc.core.libreoffice.desktop
+   dest: "{{ ansible_user_dir }}/.local/share/applications/spc.core.libreoffice.desktop"
+   mode: "0640"
+- name: Pod tpl
+  template:
+   src: pod-librof.yml
+   dest: "{{ pods_dir }}/pod-librof.yml"
+   mode: "0440"
+- name: Svc tpl
+  template:
+   src: pk-librof.service
+   dest: "{{ svc_dir }}/pk-librof.service"
+   mode: "0440"
+- name: Svc config
+  file:
+   path: "{{ ansible_user_dir }}/.config/systemd/user/pk-librof.service"
+   state: link
+   src: ../../svc/pk-librof.service
+   force: true
+- name: Image pull
+  command: podman pull lscr.io/linuxserver/libreoffice
+  register: res
+  changed_when: res.rc == 0
+- name: Svc config
+  service:
+   name: pk-librof.service
+   enabled: false
+   scope: user
+   daemon_reload: true

@@ -1,0 +1,97 @@
+##### secured-pc ##### auteur: L. Delatte, 2024
+# configure ms_onedrive environment
+
+- name: Sudo tasks
+  become_method: ansible.builtin.sudo
+  become: true
+  block:
+
+   - name: Ms_onedrive dir
+     file:
+      path: "{{ data_dir }}"
+      state: directory
+      owner: "root"
+      group: "{{ ansible_user }}"
+      mode: "0770"
+   - name: Ms_onedrive dir
+     file:
+      path: "{{ data_dir }}/msOneDrive"
+      state: directory
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ff_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.od }}"
+      mode: "0775"
+   - name: Ms_onedrive dir
+     file:
+      path: "{{ ansible_user_dir }}/.config/onedrive"
+      state: directory
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.od }}"
+      mode: "0770"
+   - name: Ms_onedrive dir
+     file:
+      path: "{{ ansible_user_dir }}/msOneDrive"
+      src: "{{ data_dir }}/msOneDrive"
+      state: link
+      force: true
+
+   - name: Local ms_onedrive config
+     template:
+      src: config
+      dest: "{{ ansible_user_dir }}/.config/onedrive/config"
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.od }}"
+      mode: "0660"
+   - name: Local ms_onedrive config
+     template:
+      src: sync_list.spc
+      dest: "{{ ansible_user_dir }}/.config/onedrive/sync_list.spc"
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.od }}"
+      mode: "0660"
+
+- name: Local ms_onedrive exec
+  template:
+   src: pk-ms_onedrive.service
+   dest: "{{ svc_dir }}/pk-ms_onedrive.service"
+   mode: "0440"
+- name: Pod tpl
+  template:
+   src: pod-ms_onedrive.yml
+   dest: "{{ pods_dir }}/pod-ms_onedrive.yml"
+   mode: "0440"
+- name: Pod tpl
+  template:
+   src: pod-ops_msod.yml
+   dest: "{{ pods_dir }}/pod-ops_msod.yml"
+   mode: "0440"
+- name: Service config
+  file:
+   path: "{{ ansible_user_dir }}/.config/systemd/user/pk-ms_onedrive.service"
+   state: link
+   src: ../../svc/pk-ms_onedrive.service
+   force: true
+- name: Image pull
+  command: podman pull docker.io/driveone/onedrive:edge
+  register: res
+  changed_when: res.rc == 0
+- name: Service activation
+  service:
+   name: pk-ms_onedrive.service
+   scope: user
+   daemon_reload: true

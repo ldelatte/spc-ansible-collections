@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=SPC-XTerm
+Comment=SPC Xterm terminal for shell executions
+Exec={{ ansible_user_dir }}/.local/bin/xterm.sh
+Icon=utilities-terminal
+Terminal=false
+Type=Application
+Categories=System;TerminalEmulator;

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=SPC-Firefox-{{ item }}
+Comment=SPC Firefox browser - {{ item }}
+Exec={{ ansible_user_dir }}/.local/bin/ffPod.sh {{ item }}
+Icon=/usr/share/icons/HighContrast/256x256/apps/firefox.png
+Terminal=false
+Type=Application
+Categories=

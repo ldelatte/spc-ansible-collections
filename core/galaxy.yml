@@ -1,12 +1,11 @@
 namespace: spc
 name: core
-version: 0.3.0
+version: 0.4.0
 readme: README.md
 authors:
   - L. DELATTE, FR (github.com/ldelatte)
 description: SPC (Secured PC) enhances the security and resiliency of your Linux PC - Core collection
-license_file:
-  - GPL-3.0-or-later
+license_file: "LICENSE"
 tags:
   - linux
   - tools

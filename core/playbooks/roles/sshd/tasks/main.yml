@@ -1,0 +1,129 @@
+##### secured-pc ##### auteur: L. Delatte, 2024
+# configure sshd environment
+
+- name: Sudo tasks
+  become_method: ansible.builtin.sudo
+  become: true
+  block:
+
+   - name: Sshd dir
+     file:
+      path: "{{ ansible_user_dir }}/Téléchargements/sshd"
+      state: directory
+      owner: "{{ xt_ct_user }}"
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.xt }}"
+      mode: "0770"
+   - name: Sshd profile
+     template:
+      src: bashrc.sh
+      dest: "{{ ansible_user_dir }}/Téléchargements/sshd/.bash_profile"
+      owner: "{{ xt_ct_user }}"
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.xt }}"
+      mode: "0540"
+   - name: Sshd shadow
+     template:
+      src: shadow
+      dest: "{{ ansible_user_dir }}/Téléchargements/sshd/.shadow.spc"
+      owner: "{{ xt_ct_user }}"
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.xt }}"
+      mode: "0460"
+   - name: Sshd keys
+     file:
+      path: "{{ ansible_user_dir }}/Téléchargements/sshd/.keys"
+      state: directory
+      owner: "{{ xt_ct_user }}"
+      group: "{{ xt_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.xt }}"
+      mode: "0755"
+
+   - name: Generates a new set of keys for sshd
+     command: ssh-keygen -t rsa -b 4096 -N "" -f {{ ansible_user_dir }}/Téléchargements/sshd/.keys/ssh_host_rsa_key
+     args:
+      creates: "{{ ansible_user_dir }}/Téléchargements/sshd/.keys/ssh_host_rsa_key"
+   - name: Generates a new set of keys for sshd
+     command: ssh-keygen -t ecdsa -b 521 -N "" -f {{ ansible_user_dir }}/Téléchargements/sshd/.keys/ssh_host_ecdsa_key
+     args:
+      creates: "{{ ansible_user_dir }}/Téléchargements/sshd/.keys/ssh_host_ecdsa_key"
+   - name: Generates a new set of keys for sshd
+     command: ssh-keygen -t ed25519 -N "" -f {{ ansible_user_dir }}/Téléchargements/sshd/.keys/ssh_host_ed25519_key
+     args:
+      creates: "{{ ansible_user_dir }}/Téléchargements/sshd/.keys/ssh_host_ed25519_key"
+   - name: Configure a new set of keys for sshd
+     file:
+      path: "{{ ansible_user_dir }}/Téléchargements/sshd/.keys/{{ item }}"
+      owner: "{{ xt_ct_user }}"
+      group: "{{ xt_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.xt }}"
+      mode: "0400"
+     loop:
+      - ssh_host_rsa_key
+      - ssh_host_ecdsa_key
+      - ssh_host_ed25519_key
+   - name: Configure a new set of keys for sshd
+     file:
+      path: "{{ ansible_user_dir }}/Téléchargements/sshd/.keys/{{ item }}"
+      owner: "{{ xt_ct_user }}"
+      group: "{{ xt_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.xt }}"
+      mode: "0444"
+     loop:
+      - ssh_host_rsa_key.pub
+      - ssh_host_ecdsa_key.pub
+      - ssh_host_ed25519_key.pub
+
+- name: Local sshd exec
+  template:
+   src: pk-sshd.service
+   dest: "{{ svc_dir }}/pk-sshd.service"
+   mode: "0440"
+- name: Sshd pod tpl
+  template:
+   src: pod-sshd.yml
+   dest: "{{ pods_dir }}/pod-sshd.yml"
+   mode: "0440"
+- name: Sshd svc
+  file:
+   path: "{{ ansible_user_dir }}/.config/systemd/user/pk-sshd.service"
+   state: link
+   src: ../../svc/pk-sshd.service
+   force: true
+- name: Image pull
+  command: podman pull docker.io/ldelatte/sshd
+  register: res
+  changed_when: res.rc == 0
+- name: Sshd svc
+  service:
+   name: pk-sshd.service
+   enabled: false
+   scope: user
+   daemon_reload: true
+
+- name: Manual config
+  debug:
+   msg:
+    -
+    -
+    - You must then configure the ~/Téléchargements/sshd/.shadow file with a password. See SPC example produced: .shadow.spc
+    -
+    -

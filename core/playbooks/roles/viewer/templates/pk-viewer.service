@@ -1,0 +1,21 @@
+##### Adding by SPC v{{ version_spc }}
+##### secured-pc ##### auteur: L. Delatte, 2024
+# pod viewer
+
+[Unit]
+Description=Service viewer via un pod (integr & param LDE)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/podman kube play --replace {{ pods_dir }}/pod-viewer.yml
+ExecStop=/usr/bin/podman pod rm -f -i pk-view
+Restart=no
+TimeoutStartSec=160
+TimeoutStopSec=50
+
+[Install]
+WantedBy=default.target
+
+##### Added by SPC v{{ version_spc }}

@@ -1,0 +1,84 @@
+##### secured-pc ##### auteur: L. Delatte, 2024
+# configure clamav environment
+
+- name: Sudo tasks
+  become_method: ansible.builtin.sudo
+  become: true
+  block:
+
+   - name: Clamav packages install
+     package:
+      name: clamav
+      state: present
+   - name: Clamd packages install
+     package:
+      name: clamd
+      state: present
+
+   - name: Clamav system boolean
+     command: setsebool -P antivirus_can_scan_system 1
+     register: res
+     changed_when: res.rc == 0
+   - name: Clamscan user config
+     command: usermod -a -G {{ ansible_user }} clamscan
+     register: res
+     changed_when: res.rc == 0
+
+   - name: Clamav config
+     command: cp -p /etc/clamd.d/scan.conf /etc/clamd.d/scan.conf.0
+     args:
+      creates: /etc/clamd.d/scan.conf.0
+   - name: Clamav config
+     template:
+      src: scan.conf.spc
+      dest: /etc/clamd.d/scan.conf
+      mode: "0640"
+   - name: Freshclam config
+     template:
+      src: freshclam.conf.spc
+      dest: /etc/clamd.d/freshclam.conf
+      mode: "0640"
+
+   - name: Clamav dir
+     file:
+      path: "{{ ansible_user_dir }}/.local/state"
+      state: directory
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: "0750"
+   - name: Clamav dir
+     file:
+      path: "{{ ansible_user_dir }}/.local/state/wireplumber"
+      state: directory
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: "0750"
+   - name: Clamav dir
+     file:
+      path: "{{ ansible_user_dir }}/.config/dconf"
+      state: directory
+      owner: "{{ ansible_user }}"
+      group: "{{ ansible_user }}"
+      mode: "0750"
+
+   - name: Services activation
+     service:
+      name: clamav-freshclam.service
+      enabled: true
+   - name: Services activation
+     service:
+      name: clamav-clamonacc.service
+      enabled: true
+   - name: Services activation
+     service:
+      name: clamd@scan.service
+      enabled: true
+
+   - name: Manual config
+     debug:
+      msg:
+       -
+       -
+       - configuration for clamAV in /etc/clam.d may be checked if you have specific usage. Default config files are renamed in <name>.0.
+       -
+       -

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=SPC-Libre Office
+Comment=SPC Libre Office document editor
+Exec={{ ansible_user_dir }}/.local/bin/librof.sh
+Icon=/usr/share/icons/HighContrast/256x256/apps/libreoffice-main.png
+Terminal=false
+Type=Application
+Categories=

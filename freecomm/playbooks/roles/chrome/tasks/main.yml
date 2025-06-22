@@ -1,0 +1,68 @@
+##### secured-pc ##### auteur: L. Delatte, 2024
+# configure chrome environment
+
+- name: Sudo tasks
+  become_method: ansible.builtin.sudo
+  become: true
+  block:
+
+   - name: Various packages install
+     package:
+      name: pulseaudio-utils
+      state: present
+
+   - name: Chrome dir
+     file:
+      path: "{{ ansible_user_dir }}/Téléchargements/chrome"
+      state: directory
+      owner: "{{ ch_ct_user }}"
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.ch }}"
+      mode: "0770"
+   - name: Chrome config dir
+     file:
+      path: "{{ ansible_user_dir }}/.config/chrome"
+      state: directory
+      owner: "{{ ch_ct_user }}"
+      group: "{{ ch_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.ch }}"
+      mode: "0750"
+
+   - name: Bashrc CH
+     template:
+      src: bashrcCH.sh
+      dest: "{{ ansible_user_dir }}/.bashrc.d/spc-bashrcCH.sh"
+      owner: root
+      group: "{{ ansible_user }}"
+      mode: "0440"
+
+   - name: Chrome boolean config for the camera
+     command: setsebool -P container_use_devices 1
+     register: res
+     changed_when: res.rc == 0
+
+- name: Pod chrome
+  template:
+   src: pod-chrome.yml
+   dest: "{{ pods_dir }}/pod-chrome.yml"
+   mode: "0440"
+- name: Local chrome exec
+  template:
+   src: chrome.sh
+   dest: "{{ local_bin_dir }}/chrome.sh"
+   mode: "0540"
+- name: Desktop param
+  template:
+   src: spc.core.chrome.desktop
+   dest: "{{ ansible_user_dir }}/.local/share/applications/spc.core.chrome.desktop"
+   mode: "0640"
+- name: Pull image
+  command: podman pull docker.io/ldelatte/chrome
+  register: res
+  changed_when: res.rc == 0

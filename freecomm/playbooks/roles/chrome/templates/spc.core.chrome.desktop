@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=SPC-Chrome
+Comment=SPC Chrome browser
+Exec={{ ansible_user_dir }}/.local/bin/chrome.sh
+Icon=/usr/share/icons/HighContrast/256x256/apps/web-browser.png
+Terminal=false
+Type=Application
+Categories=System;TerminalEmulator;

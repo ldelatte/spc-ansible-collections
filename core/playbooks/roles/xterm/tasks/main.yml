@@ -1,0 +1,50 @@
+##### secured-pc ##### auteur: L. Delatte, 2024
+# configure xterm environment
+
+- name: Sudo tasks
+  become_method: ansible.builtin.sudo
+  become: true
+  block:
+
+   - name: Xterm dirs
+     file:
+      path: "{{ ansible_user_dir }}/Téléchargements/xterm"
+      state: directory
+      owner: "{{ xt_ct_user }}"
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.xt }}"
+      mode: "0770"
+
+- name: Local xterm exec
+  template:
+   src: xterm.sh
+   dest: "{{ local_bin_dir }}/xterm.sh"
+   mode: "0540"
+- name: Destop param
+  template:
+   src: spc.core.xterm.desktop
+   dest: "{{ ansible_user_dir }}/.local/share/applications/spc.core.xterm.desktop"
+   mode: "0640"
+- name: Pod tpl
+  template:
+   src: pod-xterm.yml
+   dest: "{{ pods_dir }}/pod-xterm.yml"
+   mode: "0440"
+- name: Image pull
+  command: podman pull docker.io/ldelatte/xterm
+  register: res
+  changed_when: res.rc == 0
+- name: Manual config
+  debug:
+   msg:
+    -
+    -
+    - A SElinux config must be performed for xterm like this;
+    - give a simple try to launch xterm, which shouldn't work, like this;   xterm
+    - Then configure SElinux as root like this;
+    - su -;  ./spc-selConfig.sh xterm    then follow displayed instructions.
+    -
+    -

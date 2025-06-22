@@ -1,0 +1,45 @@
+##### secured-pc ##### auteur: L. Delatte, 2024
+# configure glances environment
+
+- name: Sudo tasks
+  become_method: ansible.builtin.sudo
+  become: true
+  block:
+
+   - name: Create a system view user
+     group:
+      name: sysview
+      state: present
+      gid: "{{ gl_user }}"
+   - name: Create user
+     user:
+      name: sysview
+      state: present
+      comment: "system view user"
+      uid: "{{ gl_user }}"
+      group: sysview
+      create_home: false
+      groups: "adm,systemd-journal"
+      password_lock: true
+      shell: /sbin/nologin
+
+- name: Local glances exec
+  template:
+   src: glances.sh
+   dest: "{{ local_bin_dir }}/glances.sh"
+   mode: "0540"
+- name: Desktop param
+  template:
+   src: spc.core.glances.desktop
+   dest: "{{ ansible_user_dir }}/.local/share/applications/spc.core.glances.desktop"
+   mode: "0640"
+- name: Pod tpl
+  template:
+   src: pod-glances.yml
+   dest: "{{ pods_dir }}/pod-glances.yml"
+   mode: "0440"
+- name: Image pull
+  command: podman pull docker.io/ldelatte/glances
+  register: res
+  changed_when: res.rc == 0
+  when: ansible_connection == "local"

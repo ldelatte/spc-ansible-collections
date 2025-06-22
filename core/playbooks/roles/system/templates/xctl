@@ -1,0 +1,12 @@
+##### Adding by SPC v{{ version_spc }}
+##### secured-pc ##### auteur: L. Delatte, 2024
+# bash completion for *ctl
+#
+
+. /usr/share/bash-completion/completions/systemctl
+complete -F _systemctl sctl
+
+. /usr/share/bash-completion/completions/journalctl
+complete -F _journalctl jctl
+
+##### Added by SPC v{{ version_spc }}

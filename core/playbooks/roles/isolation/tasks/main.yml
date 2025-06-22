@@ -1,0 +1,83 @@
+##### secured-pc ##### auteur: L. Delatte, 2024
+# configure isolation environment
+
+- name: Sudo tasks
+  become_method: ansible.builtin.sudo
+  become: true
+  block:
+
+   - name: Deactivate rpcbind
+     systemd:
+      name: rpcbind.target
+      enabled: false
+      state: stopped
+      daemon_reload: true
+
+   - name: Fw config
+     command: cp -p /etc/firewalld/zones/public.xml /etc/firewalld/zones/public.xml.0
+     args:
+      creates: /etc/firewalld/zones/public.xml.0
+   - name: Public zone
+     copy:
+      src: public_loc.xml
+      dest: /etc/firewalld/zones/public.xml
+      mode: "0640"
+     when: ansible_connection == "local"
+   - name: Public zone
+     copy:
+      src: public_cli.xml
+      dest: /etc/firewalld/zones/public.xml
+      mode: "0640"
+     when: ansible_connection != "local"
+   - name: Sortie config
+     copy:
+      src: sortie.xml
+      dest: /etc/firewalld/policies/spc-sortie.xml
+      mode: "0640"
+   - name: Sortie config
+     copy:
+      src: sshd-ct.xml
+      dest: /etc/firewalld/services/spc-sshd-ct.xml
+      mode: "0640"
+   - name: Sortie config
+     copy:
+      src: printer.xml
+      dest: /etc/firewalld/services/spc-printer.xml
+      mode: "0640"
+   - name: Sortie config
+     copy:
+      src: dhcp-kvm.xml
+      dest: /etc/firewalld/services/spc-dhcp-kvm.xml
+      mode: "0640"
+   - name: Fw reload
+     systemd:
+      name: firewalld.service
+      enabled: true
+      state: started
+      daemon_reload: true
+     changed_when: false
+
+   - name: Selinux config
+     template:
+      src: selConfig.sh
+      dest: /root/spc-selConfig.sh
+      mode: "0700"
+
+- name: InfNetSys tpl
+  template:
+   src: infNetSys.sh
+   dest: "{{ ansible_user_dir }}/.config/infNetSys.sh"
+   mode: "0740"
+- name: Creates the dedicated pods local networks
+  command: sh -c "{{ ansible_user_dir }}/.config/infNetSys.sh"
+  register: res
+  changed_when: false
+
+- name: Manual config
+  debug:
+   msg:
+    -
+    -
+    - A particular isolation (re)apply is to perform after, in case of other isolation role.
+    -
+    -

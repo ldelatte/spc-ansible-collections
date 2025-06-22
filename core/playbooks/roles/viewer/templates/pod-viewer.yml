@@ -1,0 +1,148 @@
+##### Adding by SPC v{{ version_spc }}
+##### secured-pc ##### auteur: L. Delatte, 2024
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pk-view
+  label:
+    pgm: viewer
+spec:
+  containers:
+  - name: pk-okular
+    image: ldelatte/okular:latest
+    imagePullPolicy: IfNotPresent
+    # env:
+    # ports:
+    volumeMounts:
+    - name: vn-gp-ext
+      mountPath: /home/user/ext
+      readOnly: true
+    - name: vn-ve-config
+      mountPath: /home/user/.config
+      readOnly: false
+    - name: vn-ve-cache
+      mountPath: /home/user/.cache
+      readOnly: false
+    - name: vn-ve-local
+      mountPath: /home/user/.local
+      readOnly: false
+    - name: vn-ve-tele
+      mountPath: /home/user/Téléchargements
+      readOnly: true
+    - name: vn-ve-img
+      mountPath: /home/user/Images
+      readOnly: true
+    - name: vn-ve-data
+      mountPath: /home/user/data
+      readOnly: true
+    # command:
+    # args:
+    resources:
+      requests:
+        mem: 200M
+        cpu: 70Mi
+    # livenessProbe:
+    securityContext:
+      runAsUser: {{ ve_user }}
+      runAsGroup: 0
+      fsGroup: 0
+      priviledged: False
+      allowPrivilegeEscalation: False
+      readOnlyRootFilesystem: True
+      capabilities:
+      seccompProfile:
+        type:
+      seLinuxOptions:
+        user:
+        role:
+        # type:
+        type: spc_t
+        level:
+      procMount:
+      sysctls:
+        name:
+  - name: pk-gpgext
+    image: ldelatte/gpgext:latest
+    imagePullPolicy: IfNotPresent
+    # env:
+    # ports:
+    volumeMounts:
+    - name: vn-gp-gpg
+      mountPath: /home/user/.gnupg
+      readOnly: False
+    - name: vn-gp-ext
+      mountPath: /home/user/ext
+      readOnly: False
+    - name: vn-ve-tele
+      mountPath: /home/user/Téléchargements
+      readOnly: true
+    - name: vn-ve-img
+      mountPath: /home/user/Images
+      readOnly: true
+    - name: vn-ve-data
+      mountPath: /home/user/data
+      readOnly: true
+    # command:
+    # args:
+    resources:
+      requests:
+        mem: 70M
+        cpu: 30Mi
+    # livenessProbe:
+    securityContext:
+      runAsUser: {{ ve_user }}
+      runAsGroup: 0
+      fsGroup: 0
+      priviledged: False
+      allowPrivilegeEscalation: False
+      readOnlyRootFilesystem: True
+      capabilities:
+      seccompProfile:
+        type:
+      seLinuxOptions:
+        user:
+        role:
+        # type:
+        type: spc_t
+        level:
+      procMount:
+      sysctls:
+        name:
+  volumes:
+  - name: vn-gp-gpg
+    emptyDir:
+      sizeLimit: 200Mi
+  - name: vn-gp-ext
+    emptyDir:
+      sizeLimit: 500Mi
+  - name: vn-ve-config
+    hostPath:
+      path: {{ ansible_user_dir }}/.config/okular
+      type: Directory
+  - name: vn-ve-cache
+    emptyDir:
+      sizeLimit: 200Mi
+  - name: vn-ve-local
+    emptyDir:
+      sizeLimit: 200Mi
+  - name: vn-ve-tele
+    hostPath:
+      path: {{ ansible_user_dir }}/Téléchargements
+      type: Directory
+  - name: vn-ve-img
+    hostPath:
+      path: {{ ansible_user_dir }}/Images
+      type: Directory
+  - name: vn-ve-data
+    hostPath:
+      path: /data
+      type: Directory
+  restartPolicy: Never
+  terminationGracePeriodSeconds: 3
+  # hostNetwork: False
+  hostNetwork: True
+  hostPID: False
+  hostIPC: False
+
+##### Added by SPC v{{ version_spc }}

@@ -1,0 +1,37 @@
+##### Adding by SPC v{{ version_spc }}
+##### secured-pc ##### auteur: L. Delatte, 2024
+## ~/.gitconfig model
+
+[user]
+	email = ...
+	name = login name ...
+[core]
+	editor = vim
+	excludesFile = ~/.ssh/.gitignore
+[merge]
+	tool = vimdiff
+[push]
+	default = simple
+[alias]
+        cm = commit -m
+        ca = commit --amend -m
+        st = status
+        co = checkout
+        br = branch
+        bl = branch --list
+        rs = reset
+        df = diff
+        dc = diff --cached
+        ps = push
+        pl = pull
+        mg = merge
+        rb = rebase
+        cp = cherry-pick
+        l1 = log --pretty=oneline
+        l2 = log --pretty=oneline -n 12
+        lf = log --format='%h %cn %ai %s'
+        lg = log --graph --format='%h %cn %ai %s'
+        ld = log --name-status
+        ft = !git fetch && git log HEAD..origin
+
+##### Added by SPC v{{ version_spc }}

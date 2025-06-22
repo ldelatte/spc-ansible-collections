@@ -1,0 +1,64 @@
+##### Adding by SPC v{{ version_spc }}
+##### secured-pc ##### auteur: L. Delatte, 2024
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pk-xtm
+  label:
+    pgm: xterm
+spec:
+  containers:
+  - name: pk-xtm
+    image: ldelatte/xterm:latest
+    imagePullPolicy: IfNotPresent
+    # env:
+    # ports:
+    volumeMounts:
+    - name: vn-xt-X11
+      mountPath: /tmp/.X11-unix
+      readOnly: true
+    - name: vn-xt-tele
+      mountPath: /home/user/Downloads
+      readOnly: false
+    # command:
+    # args:
+    resources:
+      requests:
+        mem: 30M
+        cpu: 70Mi
+    # livenessProbe:
+    securityContext:
+      runAsUser: {{ xt_user }}
+      runAsGroup: {{ xt_user }}
+      fsGroup: {{ xt_user }}
+      priviledged: False
+      allowPrivilegeEscalation: False
+      readOnlyRootFilesystem: True
+      capabilities:
+      seccompProfile:
+        type:
+      seLinuxOptions:
+        user:
+        role:
+        type:
+        level: "{{ se_ct_level.xt }}"
+      procMount:
+      sysctls:
+        name:
+  volumes:
+  - name: vn-xt-X11
+    hostPath:
+      path: /tmp/.X11-unix
+      type: Directory
+  - name: vn-xt-tele
+    hostPath:
+      path: {{ ansible_user_dir }}/Téléchargements/xterm
+      type: Directory
+  restartPolicy: Never
+  terminationGracePeriodSeconds: 3
+  hostNetwork: False
+  hostPID: False
+  hostIPC: False
+
+##### Added by SPC v{{ version_spc }}

@@ -1,0 +1,100 @@
+##### secured-pc ##### auteur: L. Delatte, 2024
+# configure firefox environment
+
+- name: Sudo tasks
+  become_method: ansible.builtin.sudo
+  become: true
+  block:
+
+   - name: Various packages install
+     package:
+      name: pulseaudio-utils
+      state: present
+
+   - name: Firefox dir
+     file:
+      path: "{{ ansible_user_dir }}/Téléchargements/FF-{{ item }}"
+      state: directory
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.ff }}"
+      mode: "0770"
+     loop:
+      - ach
+      - pro
+      - tec
+   - name: Firefox dir
+     file:
+      path: "{{ ansible_user_dir }}/.config/mozilla-{{ item }}"
+      state: directory
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ff_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.ff }}"
+      mode: "0750"
+     loop:
+      - ach
+      - pro
+      - tec
+
+   - name: Profiles
+     template:
+      src: xulstore.json
+      dest: "{{ ansible_user_dir }}/.config/mozilla-{{ item }}/xulstore.json.spc"
+      owner: "{{ ff_ct_user }}"
+      group: "{{ ff_ct_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.ff }}"
+      mode: "0600"
+     loop:
+      - ach
+      - pro
+      - tec
+
+   - name: Bashrc FF
+     template:
+      src: bashrcFF.sh
+      dest: "{{ ansible_user_dir }}/.bashrc.d/spc-bashrcFF.sh"
+      owner: root
+      group: "{{ ansible_user }}"
+      mode: "0440"
+
+   - name: Firefox boolean config for the camera
+     command: setsebool -P container_use_devices 1
+     register: res
+     changed_when: res.rc == 0
+
+- name: Pod config
+  template:
+   src: pod-{{ item }}.yml
+   dest: "{{ pods_dir }}/pod-{{ item }}.yml"
+   mode: "0440"
+  loop:
+   - ach
+   - pro
+   - tec
+- name: Local firefox exec
+  template:
+   src: ffPod.sh
+   dest: "{{ local_bin_dir }}/ffPod.sh"
+   mode: "0540"
+- name: Desktop param
+  template:
+   src: spc.core.firefox.desktop
+   dest: "{{ ansible_user_dir }}/.local/share/applications/spc.core.firefox.{{ item }}.desktop"
+   mode: "0640"
+  loop:
+   - ach
+   - pro
+   - tec
+- name: Image pull
+  command: podman pull docker.io/ldelatte/alpff
+  register: res
+  changed_when: res.rc == 0

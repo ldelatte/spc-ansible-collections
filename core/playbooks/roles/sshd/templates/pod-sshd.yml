@@ -1,0 +1,63 @@
+##### Adding by SPC v{{ version_spc }}
+##### secured-pc ##### auteur: L. Delatte, 2024
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pk-sshd
+  label:
+    pgm: sshd
+spec:
+  containers:
+  - name: pk-sshd
+    image: ldelatte/sshd:latest
+    imagePullPolicy: IfNotPresent
+    # env:
+    ports:
+    - name: port-sshd
+      containerPort: 22
+      hostPort: 6022
+      protocol: tcp
+    volumeMounts:
+    - name: vn-sshd-tele
+      mountPath: /home/user
+      readOnly: false
+    # command:
+    # args:
+    resources:
+      requests:
+        mem: 30M
+        cpu: 70Mi
+      limits:
+        mem: 200M
+    # livenessProbe:
+    securityContext:
+      runAsUser: 0
+      runAsGroup: 0
+      fsGroup: 0
+      priviledged: False
+      allowPrivilegeEscalation: False
+      readOnlyRootFilesystem: True
+      capabilities:
+      seccompProfile:
+        type:
+      seLinuxOptions:
+        user:
+        role:
+        type:
+        level: "{{ se_ct_level.xt }}"
+      procMount:
+      sysctls:
+        name:
+  volumes:
+  - name: vn-sshd-tele
+    hostPath:
+      path: {{ ansible_user_dir }}/Téléchargements/sshd
+      type: Directory
+  restartPolicy: Never
+  terminationGracePeriodSeconds: 3
+  hostNetwork: False
+  hostPID: False
+  hostIPC: False
+
+##### Added by SPC v{{ version_spc }}

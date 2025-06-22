@@ -1,0 +1,64 @@
+##### secured-pc ##### auteur: L. Delatte, 2024
+# configure viewer environment
+
+- name: Sudo tasks
+  become_method: ansible.builtin.sudo
+  become: true
+  block:
+
+   - name: Various packages removal
+     package:
+      name: evince
+      state: absent
+   - name: Various packages removal
+     package:
+      name: eog
+      state: absent
+   - name: Create dir
+     file:
+      path: "{{ ansible_user_dir }}/.config/okular"
+      state: directory
+      owner: "{{ ve_ct_user }}"
+      group: "{{ ansible_user }}"
+      mode: "0750"
+
+- name: Local viewer exec
+  template:
+   src: viewer.sh
+   dest: "{{ local_bin_dir }}/viewer.sh"
+   mode: "0540"
+- name: Destop param
+  template:
+   src: spc.core.viewer.desktop
+   dest: "{{ ansible_user_dir }}/.local/share/applications/spc.core.viewer.desktop"
+   mode: "0640"
+- name: Pod tpl
+  template:
+   src: pod-viewer.yml
+   dest: "{{ pods_dir }}/pod-viewer.yml"
+   mode: "0440"
+- name: Local viewer service
+  template:
+   src: pk-viewer.service
+   dest: "{{ svc_dir }}/pk-viewer.service"
+   mode: "0440"
+- name: Local viewer service
+  file:
+   path: "{{ ansible_user_dir }}/.config/systemd/user/pk-viewer.service"
+   state: link
+   src: ../../svc/pk-viewer.service
+   force: true
+- name: Image pull
+  command: podman pull docker.io/ldelatte/okular
+  register: res
+  changed_when: res.rc == 0
+- name: Image pull
+  command: podman pull docker.io/ldelatte/gpgext
+  register: res
+  changed_when: res.rc == 0
+- name: Local viewer service
+  service:
+   name: pk-viewer.service
+   enabled: true
+   scope: user
+   daemon_reload: true
