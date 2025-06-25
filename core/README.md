@@ -134,7 +134,9 @@ These 2 ways of starting apply to other SPC applications as well.
 
 ### Launching a safe Firefox window:
 
-Type any of `tec` or `pro` or `ach`, which are isolated from each other browsers that you can use for different types of activities.
+Type any of `tec` or `ste`/`pro` or `ach`/`buy`, which are isolated from each other browsers that you can use for different types of activities.
+
+Video is available by default only with `tec` but for others, you can add the option `video` when suited.
 
 ### Editing some documents with LibreOffice in a safe window:
 
@@ -146,15 +148,22 @@ Done thanks to the community docker image.
 
 ### Browsing your documents inplace in a safe window (readonly mode) using the viewer service:
 
-Type: `disp` or `disp <some docs path>`
+Type: `aff` or `dis` or `dis <some docs path>`
 
 For example:
 ```
-cd ~/Images
-disp <some images names>
+cd ~
+dis Images/<some images names>
 ```
 
 Suited for text, PDF and images.
+
+It works also for viewing docs in a zipped file `my_files.zip`.
+
+You can as well view docs encrypted with a gpg passphrase without permanently adding their clear content on your drive:
+```
+dis /data/msOneDrive/<my_gpg_or_gpgtar_file>.pgp or .gpg
+```
 
 ### Activate a local ssh daemon to access the PC remotely and safely:
 

@@ -20,12 +20,26 @@ if [ "$PS1" ]; then
   alias ntp='sudo systemctl restart chronyd.service'
   alias rstc='sudo nice -n -{{ nice }} /usr/local/bin/spc-restart_pods.sh clamd'
   alias rsts='/usr/local/bin/spc-restart_pods.sh pods'
-  alias disp='viewer.sh'
-  alias aff='viewer.sh'
-  alias glances='glances.sh'
   alias scrub='scrub -b 4K'
   #
-  df -h|grep "[09][0-9]%"
+  # containerized:
+  alias aff='viewer.sh'
+  alias dis='viewer.sh'
+  alias lbo='~/.local/bin/librof.sh'
+  alias tec='~/.local/bin/ffPod.sh tec'
+  alias ach='~/.local/bin/ffPod.sh ach'
+  alias buy='~/.local/bin/ffPod.sh ach'
+  alias ste='~/.local/bin/ffPod.sh pro'
+  alias pro='~/.local/bin/ffPod.sh pro'
+  alias xterm='~/.local/bin/xterm.sh'
+  alias glances='glances.sh'
+  #
+  # selfmonitoring:
+  df -h|grep "[09][0-9]%" && echo ">>>>> WARNING: some disks are filled <<<<<"
+  timeout 2 curl -s google.fr >/dev/null || echo ">>>>> ERROR: no network <<<<<"
+  pgrep -x firewalld >/dev/null || echo ">>>>> ERROR: firewalld not running <<<<<"
+  [ `pgrep clam | wc -l` -ge 3 ] || echo ">>>>> ERROR: some clamav process not running <<<<<"
+  [ "`getenforce`" = "Enforcing" ] || echo ">>>>> WARNING: SElinux not enforcing <<<<<"
   #
 fi
 
