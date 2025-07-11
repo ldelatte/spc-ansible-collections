@@ -23,7 +23,6 @@ se_ct_user: system_u
 se_ct_role: object_r
 se_ct_type: container_file_t
 
-roles_dir: "{{ ansible_facts.env.PWD }}/../playbooks/roles"
 local_bin_dir: "{{ ansible_user_dir }}/.local/bin"
 svc_dir: "{{ ansible_user_dir }}/.config/svc"
 pods_dir: "{{ ansible_user_dir }}/.config/pods"

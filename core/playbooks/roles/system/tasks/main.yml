@@ -7,7 +7,6 @@
     installed host: {{ ansible_hostname }}"     "
     install user: {{ ansible_user }}"     "
     install user's dir: {{ ansible_user_dir }}"     "
-    roles dir:  {{ roles_dir }}"     "
 
 - name: Sudo tasks
   become_method: ansible.builtin.sudo
