@@ -10,7 +10,7 @@ metadata:
 spec:
   containers:
   - name: pk-glances
-    image: ldelatte/glances:latest
+    image: docker.io/ldelatte/glances:latest
     imagePullPolicy: IfNotPresent
     # env:
     # ports:

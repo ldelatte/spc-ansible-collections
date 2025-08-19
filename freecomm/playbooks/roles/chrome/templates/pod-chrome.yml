@@ -10,7 +10,7 @@ metadata:
 spec:
   containers:
   - name: pk-chrome
-    image: ldelatte/chrome:latest
+    image: docker.io/ldelatte/chrome:latest
     imagePullPolicy: IfNotPresent
     env:
     - name: PULSE_SERVER

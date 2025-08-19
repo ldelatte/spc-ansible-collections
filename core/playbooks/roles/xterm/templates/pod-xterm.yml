@@ -10,7 +10,7 @@ metadata:
 spec:
   containers:
   - name: pk-xtm
-    image: ldelatte/xterm:latest
+    image: docker.io/ldelatte/xterm:latest
     imagePullPolicy: IfNotPresent
     # env:
     # ports:

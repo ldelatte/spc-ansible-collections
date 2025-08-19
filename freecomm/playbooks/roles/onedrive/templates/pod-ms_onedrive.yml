@@ -11,7 +11,7 @@ spec:
   containers:
   - name: pk-onedrive
     # Image from community: https://github.com/abraunegg/onedrive/blob/master/docs/Podman.md
-    image: driveone/onedrive:edge
+    image: docker.io/driveone/onedrive:edge
     imagePullPolicy: IfNotPresent
     env:
     - name: ONEDRIVE_SYNC_ONCE

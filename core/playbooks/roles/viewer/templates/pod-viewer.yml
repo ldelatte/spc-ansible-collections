@@ -10,7 +10,7 @@ metadata:
 spec:
   containers:
   - name: pk-okular
-    image: ldelatte/okular:latest
+    image: docker.io/ldelatte/okular:latest
     imagePullPolicy: IfNotPresent
     # env:
     # ports:
@@ -27,6 +27,9 @@ spec:
     - name: vn-ve-local
       mountPath: /home/user/.local
       readOnly: false
+    - name: vn-ve-dri
+      mountPath: /dev/dri
+      readOnly: true
     - name: vn-ve-tele
       mountPath: /home/user/Téléchargements
       readOnly: true
@@ -63,7 +66,7 @@ spec:
       sysctls:
         name:
   - name: pk-gpgext
-    image: ldelatte/gpgext:latest
+    image: docker.io/ldelatte/gpgext:latest
     imagePullPolicy: IfNotPresent
     # env:
     # ports:
@@ -126,6 +129,10 @@ spec:
   - name: vn-ve-local
     emptyDir:
       sizeLimit: 200Mi
+  - name: vn-ve-dri
+    hostPath:
+      path: /dev/dri
+      type: Directory
   - name: vn-ve-tele
     hostPath:
       path: {{ ansible_user_dir }}/Téléchargements

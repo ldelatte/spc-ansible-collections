@@ -10,7 +10,7 @@ metadata:
 spec:
   containers:
   - name: pk-sshd
-    image: ldelatte/sshd:latest
+    image: docker.io/ldelatte/sshd:latest
     imagePullPolicy: IfNotPresent
     # env:
     ports:
