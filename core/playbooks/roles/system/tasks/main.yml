@@ -26,6 +26,7 @@
       - ntfs-3g
       - inotify-tools
       - scrub
+      - xsane
    - name: Various packages removal
      package:
       name: "{{ item }}"

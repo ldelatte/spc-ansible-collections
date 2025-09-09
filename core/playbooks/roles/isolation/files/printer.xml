@@ -3,4 +3,10 @@
   <short>spc-printer</short>
   <description>Port sortant pour le serveur d impression.</description>
   <port protocol="tcp" port="515"/>
+  # HP Deskjet:
+  <port protocol="udp" port="5353"/>   # in/out
+  <port protocol="udp" port="67"/>
+  <port protocol="tcp" port="3911"/>
+  <port protocol="tcp" port="9100"/>
+  <port protocol="udp" port="161"/>
 </service>
