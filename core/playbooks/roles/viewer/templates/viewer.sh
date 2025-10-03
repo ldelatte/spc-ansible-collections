@@ -14,8 +14,9 @@ xhost + LOCAL: >/dev/null
 
 lst() {
     sed 's|\(\w\.\w*\) |\1\n|g' |
+    grep -v "/.* .*/" |
     while read l ;do [ -f "$l" ] && echo -n "$dir/" && basename "$l" ;done |
-	sed -e 's|^/home/\w*||' -e 's|^|/home/user|'
+    sed -e 's|^/home/\w*||' -e 's|^|/home/user|' -e 's|^/home/user/msOneDrive|/home/user/data/msOneDrive|' -e 's|^/home/user/documents|/home/user/data/documents|' -e 's|^/home/user/archives|/home/user/data/archives|'
 }
 
 flt() {
@@ -28,11 +29,11 @@ flt() {
         lst
     fi |
     grep -v -i -e "\.pgp" -e "\.gpg" -e "\.zip" |
-    grep -i -e "\.png" -e "\.jpg" -e "\.gif" -e "\.pdf" -e "\.txt" -e "\.sh" -e "\.log" |
+    grep -i -e "\.png" -e "\.jpg" -e "\.pdf" -e "\.txt" -e "\.sh" -e "\.log" |
     sed -e 's/^/file:/' -e 's/ /%20/g'
 }
 
-dir="`echo $* | sed 's|\(\w\.\w*\) |\1\n|g' | head -1`"
+dir="`echo $* | sed 's|\(\w\.\w*\) |\1\n|g' | grep -v "/.* .*/" | head -1`"
 dir=`dirname "$dir"`
 echo $dir | grep -q "^\.\." && { pwd=`echo $PWD | sed 's|/[^/]*$||'`; dir="`echo $dir | sed 's|..|'$pwd'|'`"; }
 echo $dir | grep -q "^\." && dir="`echo $dir | sed 's|.|'$PWD'|'`"
