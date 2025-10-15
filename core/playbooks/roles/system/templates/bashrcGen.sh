@@ -8,7 +8,7 @@ if [ "$PS1" ]; then
   #
   set -o vi
   #
-  alias sctl='systemctl'
+  alias sctl='systemctl --no-pager -n 200'
   alias jctl='journalctl'
   #
   alias l='ls -lrt'
