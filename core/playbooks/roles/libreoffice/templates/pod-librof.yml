@@ -51,7 +51,7 @@ spec:
       sysctls:
         name:
   - name: pk-ff-tec
-    image: docker.io/ldelatte/alpff:latest
+    image: docker.io/ldelatte/alpff:stable
     imagePullPolicy: IfNotPresent
     env:
     - name: DISPLAY
