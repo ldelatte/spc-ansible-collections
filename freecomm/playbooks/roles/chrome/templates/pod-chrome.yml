@@ -32,6 +32,9 @@ spec:
     - name: vn-cho-shm
       mountPath: /dev/shm
       readOnly: false
+    - name: vn-cho-dri
+      mountPath: /dev/dri
+      readOnly: true
     - name: vn-cho-video
       mountPath: /dev/video0
       readOnly: true
@@ -80,6 +83,10 @@ spec:
   - name: vn-cho-shm
     emptyDir:
       sizeLimit: 999Mi
+  - name: vn-cho-dri
+    hostPath:
+      path: /dev/dri
+      type: Directory
   - name: vn-cho-video
     hostPath:
       path: /dev/video0
