@@ -26,6 +26,9 @@ spec:
     - name: vn-fft-cache
       mountPath: /home/user/.cache
       readOnly: false
+    - name: vn-fft-local
+      mountPath: /home/user/.local
+      readOnly: false
     - name: vn-fft-config
       mountPath: /home/user/.config
       readOnly: false
@@ -34,6 +37,10 @@ spec:
       readOnly: false
     - name: vn-fft-fonts
       mountPath: /usr/share/fonts
+      readOnly: true
+    - name: vn-fft-dbus
+      mountPath: /var/lib/dbus/machine-id
+      subPath: machine-id
       readOnly: true
     - name: vn-fft-video
       mountPath: /dev/video0
@@ -75,6 +82,9 @@ spec:
   - name: vn-fft-cache
     emptyDir:
       sizeLimit: 300Mi
+  - name: vn-fft-local
+    emptyDir:
+      sizeLimit: 300Mi
   - name: vn-fft-config
     emptyDir:
       sizeLimit: 20Mi
@@ -85,6 +95,10 @@ spec:
   - name: vn-fft-fonts
     hostPath:
       path: /usr/share/fonts
+      type: Directory
+  - name: vn-fft-dbus
+    hostPath:
+      path: /etc
       type: Directory
   - name: vn-fft-video
     hostPath:

@@ -26,6 +26,9 @@ spec:
     - name: vn-ffa-cache
       mountPath: /home/user/.cache
       readOnly: false
+    - name: vn-ffa-local
+      mountPath: /home/user/.local
+      readOnly: false
     - name: vn-ffa-config
       mountPath: /home/user/.config
       readOnly: false
@@ -34,6 +37,10 @@ spec:
       readOnly: false
     - name: vn-ffa-fonts
       mountPath: /usr/share/fonts
+      readOnly: true
+    - name: vn-ffa-dbus
+      mountPath: /var/lib/dbus/machine-id
+      subPath: machine-id
       readOnly: true
     - name: vn-ffa-video
       mountPath: /dev/video0
@@ -75,6 +82,9 @@ spec:
   - name: vn-ffa-cache
     emptyDir:
       sizeLimit: 300Mi
+  - name: vn-ffa-local
+    emptyDir:
+      sizeLimit: 300Mi
   - name: vn-ffa-config
     emptyDir:
       sizeLimit: 20Mi
@@ -85,6 +95,10 @@ spec:
   - name: vn-ffa-fonts
     hostPath:
       path: /usr/share/fonts
+      type: Directory
+  - name: vn-ffa-dbus
+    hostPath:
+      path: /etc
       type: Directory
   - name: vn-ffa-video
     hostPath:
