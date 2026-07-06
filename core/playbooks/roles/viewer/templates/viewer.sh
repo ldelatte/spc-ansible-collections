@@ -42,7 +42,7 @@ echo $dir | grep -q "^\w" && dir="`echo $dir | sed 's|^|'$PWD'/|'`"
 ext=0
 if [ `echo $* | lst | wc -l` = 1 ] && echo $* | lst | grep -q -i -e "\.pgp$" -e "\.gpg" ;then    # pgp ...
     pgp=`echo $* | lst| sed 's/ /\\\ /g'`
-    podman exec -it pk-view-pk-gpgext sh -c "rm -rf * && gpgtar -d $pgp >ext.log 2>&1"
+    podman exec -it pk-view-pk-gpgext sh -c "rm -rf * && gpgtar -d $pgp"
     unique=$?
     set `podman exec -it pk-view-pk-gpgext sh -c "ext.sh $unique $pgp | xargs"`
     dir="\/home\/user\/ext"

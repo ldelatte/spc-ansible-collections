@@ -34,6 +34,8 @@ if [ "$PS1" ]; then
   alias xterm='~/.local/bin/xterm.sh'
   alias glances='glances.sh'
   #
+  export LS_COLORS="di=1;93:ln=1;96:ex=1;92:*=1;1"
+  #
   # selfmonitoring:
   df -h|grep "[09][0-9]%" && echo ">>>>> WARNING: some disks are filled <<<<<"
   timeout 2 curl -s google.fr >/dev/null || echo ">>>>> ERROR: no network <<<<<"
