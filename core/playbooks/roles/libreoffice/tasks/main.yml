@@ -27,7 +27,7 @@
       serole: "{{ se_ct_role }}"
       setype: "{{ se_ct_type }}"
       selevel: "{{ se_ct_level.lo }}"
-      mode: "0770"
+      mode: "2770"
    - name: Libreoffice dir
      file:
       path: "{{ ansible_user_dir }}/.config/mozilla-lbo"

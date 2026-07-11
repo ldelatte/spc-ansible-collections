@@ -21,7 +21,7 @@
       serole: "{{ se_ct_role }}"
       setype: "{{ se_ct_type }}"
       selevel: "{{ se_ct_level.ff }}"
-      mode: "0770"
+      mode: "2770"
      loop:
       - ach
       - pro
