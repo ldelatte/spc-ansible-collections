@@ -16,7 +16,7 @@ lst() {
     sed 's|\(\w\.\w*\) |\1\n|g' |
     grep -v "/.* .*/" |
     while read l ;do [ -f "$l" ] && echo -n "$dir/" && basename "$l" ;done |
-    sed -e 's|^/home/\w*||' -e 's|^|/home/user|' -e 's|^/home/user/msOneDrive|/home/user/data/msOneDrive|' -e 's|^/home/user/documents|/home/user/data/documents|' -e 's|^/home/user/archives|/home/user/data/archives|'
+    sed -e 's|^/home/\w*||' -e 's|^|/home/user|' -e 's|^/home/user/msOneDrive|/home/user/data/msOneDrive|' -e 's|^/home/user/pCloud|/home/user/data/pCloud|' -e 's|^/home/user/documents|/home/user/data/documents|' -e 's|^/home/user/archives|/home/user/data/archives|' 
 }
 
 flt() {
