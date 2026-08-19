@@ -21,6 +21,7 @@ if [ "$PS1" ]; then
   alias rstc='sudo nice -n -{{ nice }} /usr/local/bin/spc-restart_pods.sh clamd'
   alias rsts='/usr/local/bin/spc-restart_pods.sh pods'
   alias scrub='scrub -b 4K'
+  alias vi='/usr/bin/vim'
   #
   # containerized:
   alias aff='viewer.sh'
@@ -35,6 +36,7 @@ if [ "$PS1" ]; then
   alias glances='glances.sh'
   #
   export LS_COLORS="di=1;93:ln=1;96:ex=1;92:*=1;1"
+  export GREP_COLORS="fn=1;93:mt=1;92"
   #
   # selfmonitoring:
   df -h|grep "[09][0-9]%" && echo ">>>>> WARNING: some disks are filled <<<<<"
