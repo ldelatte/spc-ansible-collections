@@ -8,31 +8,20 @@
 
    - name: Libreoffice dir
      file:
-      path: "{{ ansible_user_dir }}/.config/libreoffice"
+      path: "{{ ansible_user_dir }}/.config/libre-office"
       state: directory
-      owner: "{{ ff_ct_user }}"
+      owner: 100999
       group: "{{ ff_ct_user }}"
       seuser: "{{ se_ct_user }}"
       serole: "{{ se_ct_role }}"
       setype: "{{ se_ct_type }}"
       selevel: "{{ se_ct_level.lo }}"
-      mode: "0770"
-   - name: Libreoffice dir
-     file:
-      path: "{{ ansible_user_dir }}/Téléchargements/libreoffice"
-      state: directory
-      owner: "{{ ff_ct_user }}"
-      group: "{{ ansible_user }}"
-      seuser: "{{ se_ct_user }}"
-      serole: "{{ se_ct_role }}"
-      setype: "{{ se_ct_type }}"
-      selevel: "{{ se_ct_level.lo }}"
-      mode: "2770"
+      mode: "0750"
    - name: Libreoffice dir
      file:
       path: "{{ ansible_user_dir }}/.config/mozilla-lbo"
       state: directory
-      owner: "{{ ff_ct_user }}"
+      owner: 100999
       group: "{{ ff_ct_user }}"
       seuser: "{{ se_ct_user }}"
       serole: "{{ se_ct_role }}"
@@ -43,13 +32,24 @@
      template:
       src: xulstore.json
       dest: "{{ ansible_user_dir }}/.config/mozilla-lbo/xulstore.json.spc"
-      owner: "{{ ff_ct_user }}"
+      owner: 100999
       group: "{{ ff_ct_user }}"
       seuser: "{{ se_ct_user }}"
       serole: "{{ se_ct_role }}"
       setype: "{{ se_ct_type }}"
       selevel: "{{ se_ct_level.lo }}"
       mode: "0600"
+   - name: Libreoffice dir
+     file:
+      path: "{{ ansible_user_dir }}/Téléchargements/libreoffice"
+      state: directory
+      owner: 100999
+      group: "{{ ansible_user }}"
+      seuser: "{{ se_ct_user }}"
+      serole: "{{ se_ct_role }}"
+      setype: "{{ se_ct_type }}"
+      selevel: "{{ se_ct_level.lo }}"
+      mode: "2770"
 
    - name: Bashrc Lbo
      template:
@@ -86,7 +86,7 @@
    src: ../../svc/pk-librof.service
    force: true
 - name: Image pull
-  command: podman pull lscr.io/linuxserver/libreoffice
+  command: podman pull kasmweb/libre-office:1.19.0-rolling-weekly
   register: res
   changed_when: res.rc == 0
 - name: Svc config

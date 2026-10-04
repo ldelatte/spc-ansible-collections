@@ -10,19 +10,20 @@ metadata:
 spec:
   containers:
   - name: pk-librof
-    image: lscr.io/linuxserver/libreoffice:latest
+    image: kasmweb/libre-office:1.19.0-rolling-weekly
     imagePullPolicy: IfNotPresent
     env:
-    - name: PUID
-      value: {{ ff_user }}
-    - name: PGID
-      value: {{ ff_user }}
+    - name: VNC_PW
+      value: BpTlsEc4jT
     volumeMounts:
     - name: vn-lo-config
-      mountPath: /config
+      mountPath: /home/kasm-user/.config
       readOnly: false
     - name: vn-lo-tele
-      mountPath: /config/doc
+      mountPath: /home/kasm-user/Documents
+      readOnly: false
+    - name: vn-lo-shm
+      mountPath: /dev/shm
       readOnly: false
     # command:
     # args:
@@ -32,17 +33,16 @@ spec:
         cpu: 100Mi
     # livenessProbe:
     securityContext:
-      runAsUser: 0
-      runAsGroup: 0
+      runAsUser: 1000
+      runAsGroup: {{ ff_user }}
       fsGroup: 0
-      priviledged: True
+      priviledged: False
       allowPrivilegeEscalation: False
       readOnlyRootFilesystem: False
       capabilities:
-      # seccompProfile: type: unconfined #optional
       seccompProfile:
         type:
-      seLinuxOptions: # tint2 !! ???
+      seLinuxOptions:
         user:
         role:
         type:
@@ -51,7 +51,7 @@ spec:
       sysctls:
         name:
   - name: pk-ff-tec
-    image: docker.io/ldelatte/alpff:stable
+    image: docker.io/ldelatte/alpff:latest
     imagePullPolicy: IfNotPresent
     env:
     - name: DISPLAY
@@ -70,11 +70,11 @@ spec:
     - name: vn-ffl-config
       mountPath: /home/user/.config
       readOnly: false
-    - name: vn-lo-tele
-      mountPath: /home/user/Téléchargements
-      readOnly: false
     - name: vn-ffl-fonts
       mountPath: /usr/share/fonts
+      readOnly: true
+    - name: vn-lo-tele
+      mountPath: /home/user/Téléchargements
       readOnly: true
     command:
     - "/bin/sleep"
@@ -86,9 +86,9 @@ spec:
         cpu: 90Mi
     # livenessProbe:
     securityContext:
-      runAsUser: {{ ff_user }}
+      runAsUser: 1000
       runAsGroup: {{ ff_user }}
-      fsGroup: {{ ff_user }}
+      fsGroup: 0
       priviledged: False
       allowPrivilegeEscalation: False
       readOnlyRootFilesystem: True
@@ -106,12 +106,15 @@ spec:
   volumes:
   - name: vn-lo-config
     hostPath:
-      path: {{ ansible_user_dir }}/.config/libreoffice
+      path: {{ ansible_user_dir }}/.config/libre-office
       type: Directory
   - name: vn-lo-tele
     hostPath:
       path: {{ ansible_user_dir }}/Téléchargements/libreoffice
       type: Directory
+  - name: vn-lo-shm
+    emptyDir:
+      sizeLimit: 500Mi
   - name: vn-ffl-X11
     hostPath:
       path: /tmp/.X11-unix
